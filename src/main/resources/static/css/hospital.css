@@ -1,0 +1,53 @@
+
+.navbar-custom {
+    background-color: #555555;
+}
+/* 自定义brand和文字颜色 */
+.navbar-custom .navbar-brand,
+.navbar-custom .navbar-text {
+    color: #3e8f3e;
+}
+/* 自定义链接颜色 */
+.navbar-custom .navbar-nav .nav-link {
+    color: #3e8f3e;
+}
+/* 自定义激活或者悬停的链接颜色 */
+.navbar-custom .nav-item.active .nav-link,
+.navbar-custom .nav-item:hover .nav-link {
+    color: #ffffff;
+}
+.headline-button{
+    background-color: #ffffff;
+    color: #3e8f3e;
+}
+
+.notice-title{
+    margin-top: 25px;
+}
+.text-desc{
+    font-size: 12px;
+    font-weight: normal;
+    color: #999;
+}
+.media{
+    border-color:#3e8f3e;
+    border-radius: 15px;
+    margin: 10px;
+    border-style:solid ;
+}
+.notice{
+    padding-top: 10px;
+}
+.noticeblank{
+    background-color: #c0a16b;
+    border-radius: 15px;
+}
+.notice-heading{
+    border-radius: 15px;
+    background-color: white;
+}
+.intorduceblank{
+    background-color: #c0a16b;
+    border-radius: 15px;
+    margin-top: 20px;
+}

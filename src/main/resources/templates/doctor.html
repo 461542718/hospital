@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+
+    <title>挂号预约系统</title>
+    <link rel="stylesheet" href="../css/bootstrap.min.css">
+    <link rel="stylesheet" href="../css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="../css/hospital.css">
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
+    <!--    <script-->
+    <!--            src="https://code.jquery.com/jquery-3.4.1.min.js"-->
+    <!--            integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="-->
+    <!--            crossorigin="anonymous"></script>-->
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="../js/hospital.js"></script>
+</head>
+<script type="application/javascript">
+    window.onload = function () {
+        var closable=window.localStorage.getItem("closable");
+        if(closable){
+            window.close();
+            window.localStorage.removeItem("closable");
+        }
+    }
+</script>
+<body>
+
+<div th:insert="navigation::nav"></div>
+
+<div class="container-fluid main">
+    <div class="row">
+        <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
+            <h2><span class="glyphicon glyphicon-home" aria-hidden="true"></span>  选择挂号医生</h2>
+            <hr>
+            <div class="media" th:each="item:${pageInfo.list}">
+                <!--          获取当前的医院号      ${hospitaldepartments[itemStat.index].hospitalId}-->
+                <div class="media-left">
+                    <a href="#">
+                        <img th:if="${item.dphoto==null}" alt="160x160" width="80px" height="100px" class="media-object img-thumbnail" src="images/userphoto/default.jpeg">
+                        <img th:if="${item.dphoto!=null}" alt="160x160" width="80px" height="100px" class="media-object img-thumbnail" th:src="${item.dphoto}">
+                    </a>
+                </div>
+                <div class="media-body">
+                    <h4 class="media-heading">
+                        <a th:href="@{'/doctorRegister/'+${item.did}}" th:text="${item.dname}"></a>
+                    </h4>
+                    <span th:text="${item.dsex==0}?'男':'女'"></span>
+                    <br/>
+                    <span th:text="'医生电话：'+${item.dtel}"></span>
+                    <span th:text="'医生职称：'+${item.Lname}"></span>
+                    <br/>
+                    <button id="btn" onclick="toggle(this)" th:data-id="${item.did}">详情</button>
+                    <div th:id="${'spread-'+item.did}" style="display:none">
+                        <span th:text="'医生所属科室：'+${item.dpmtname}"></span>
+                        <br/>
+                        <span th:text="'医生简介：'+${item.dinfo}"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
+            <a href="/"><button type="button" class="btn btn-default btn-lg"><span class="glyphicon glyphicon-home"></span>返回首页</button></a>
+        </div>
+        <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12 intorduceblank" style="float:right">
+            <h3>医生选择引导</h3>
+            <span>
+                <p>·点击医生名称即可进入该医生挂号页面</p><br>
+                <p>·点击详情可查看医生的更多详细信息</p><br>
+
+            <span/>
+        </div>
+    </div>
+</div>
+</body>
+</html>

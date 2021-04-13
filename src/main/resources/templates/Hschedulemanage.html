@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+
+    <title>挂号预约系统</title>
+    <link rel="stylesheet" href="../css/bootstrap.min.css">
+    <link rel="stylesheet" href="../css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="../css/hospital.css">
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
+    <!--    <script-->
+    <!--            src="https://code.jquery.com/jquery-3.4.1.min.js"-->
+    <!--            integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="-->
+    <!--            crossorigin="anonymous"></script>-->
+    <script src="../js/bootstrap.min.js"></script>
+
+</head>
+<script type="application/javascript">
+    window.onload = function () {
+        var closable=window.localStorage.getItem("closable");
+        if(closable){
+            window.close();
+            window.localStorage.removeItem("closable");
+        }
+    }
+</script>
+<body>
+
+<div th:insert="Mnavigation::nav"></div>
+
+<!-- begin:添加一个登录表单 -->
+<div>
+    <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
+
+
+        <!-- begin:主页 -->
+        <div>
+            <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
+                <ul class="nav nav-tabs">
+                    <!--                    <li role="presentation" ><a href="/Mindex">医院登记</a></li>-->
+                    <li role="presentation" ><a href="/Hindex">科室登记</a></li>
+                    <li role="presentation" class="active"><a href="/Hdoctormanage">医生登记</a></li>
+                    <li role="presentation"><a href="/Happlymanage">申请审核</a></li>
+                    <!--                    <li role="presentation"><a href="/hospitaldepartmentmanage">医院科室登记</a></li>-->
+                    <!--                    <li role="presentation"><a href="/registermanage">挂号登记</a></li>-->
+                    <!--                    <li role="presentation"><a href="/noticemanage">发布公告</a></li>-->
+                </ul>
+                <h3 th:text="${dname}+'排班信息管理'"></h3>
+            </div>
+        </div>
+
+        <!--begin：信息显示表格-->
+        <div class="card-body" >
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th>星期</th>
+                    <th>号数</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>星期一早上</td>
+                    <td th:text="${mondayM.registerLimited}"></td>
+                    <td>
+                        <div class="btn-group">
+                            <button class="btn btn-sm btn-danger"><a th:href="@{/insertHschedule/{scid}/{week}/{did}/{time}(scid=${mondayM.Scid},week=1,did=${did},time=0)}" style="color: white">编辑</a></button>
+                            <button class="btn btn-sm btn-danger"><a th:href="@{/delectHschedule/{scid}/{did}(scid=${mondayM.Scid},did=${did})}" style="color: white">删除</a></button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>星期一下午</td>
+                    <td th:text="${mondayA.registerLimited}"></td>
+                    <td>
+                        <div class="btn-group">
+                            <button class="btn btn-sm btn-danger"><a th:href="@{/insertHschedule/{scid}/{week}/{did}/{time}(scid=${mondayA.Scid},week=1,did=${did},time=1)}" style="color: white">编辑</a></button>
+                            <button class="btn btn-sm btn-danger"><a th:href="@{/delectHschedule/{scid}/{did}(scid=${mondayA.Scid},did=${did})}" style="color: white">删除</a></button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>星期二早上</td>
+                    <td th:text="${tuesdayM.registerLimited}"></td>
+                    <td>
+                        <div class="btn-group">
+                            <button class="btn btn-sm btn-danger"><a th:href="@{/insertHschedule/{scid}/{week}/{did}/{time}(scid=${tuesdayM.Scid},week=2,did=${did},time=0)}" style="color: white">编辑</a></button>
+                            <button class="btn btn-sm btn-danger"><a th:href="@{/delectHschedule/{scid}/{did}(scid=${tuesdayM.Scid},did=${did})}" style="color: white">删除</a></button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>星期二下午</td>
+                    <td th:text="${tuesdayA.registerLimited}"></td>
+                    <td>
+                        <div class="btn-group">
+                            <button class="btn btn-sm btn-danger"><a th:href="@{/insertHschedule/{scid}/{week}/{did}/{time}(scid=${tuesdayA.Scid},week=2,did=${did},time=1)}" style="color: white">编辑</a></button>
+                            <button class="btn btn-sm btn-danger"><a th:href="@{/delectHschedule/{scid}/{did}(scid=${tuesdayA.Scid},did=${did})}" style="color: white">删除</a></button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>星期三早上</td>
+                    <td th:text="${wednesdayM.registerLimited}"></td>
+                    <td>
+                        <div class="btn-group">
+                            <button class="btn btn-sm btn-danger"><a th:href="@{/insertHschedule/{scid}/{week}/{did}/{time}(scid=${wednesdayM.Scid},week=3,did=${did},time=0)}" style="color: white">编辑</a></button>
+                            <button class="btn btn-sm btn-danger"><a th:href="@{/delectHschedule/{scid}/{did}(scid=${wednesdayM.Scid},did=${did})}" style="color: white">删除</a></button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>星期三下午</td>
+                    <td th:text="${wednesdayA.registerLimited}"></td>
+                    <td>
+                        <div class="btn-group">
+                            <button class="btn btn-sm btn-danger"><a th:href="@{/insertHschedule/{scid}/{week}/{did}/{time}(scid=${wednesdayA.Scid},week=3,did=${did},time=1)}" style="color: white">编辑</a></button>
+                            <button class="btn btn-sm btn-danger"><a th:href="@{/delectHschedule/{scid}/{did}(scid=${wednesdayA.Scid},did=${did})}" style="color: white">删除</a></button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>星期四早上</td>
+                    <td th:text="${thursdayM.registerLimited}"></td>
+                    <td>
+                        <div class="btn-group">
+                            <button class="btn btn-sm btn-danger"><a th:href="@{/insertHschedule/{scid}/{week}/{did}/{time}(scid=${thursdayM.Scid},week=4,did=${did},time=0)}" style="color: white">编辑</a></button>
+                            <button class="btn btn-sm btn-danger"><a th:href="@{/delectHschedule/{scid}/{did}(scid=${thursdayM.Scid},did=${did})}" style="color: white">删除</a></button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>星期四下午</td>
+                    <td th:text="${thursdayA.registerLimited}"></td>
+                    <td>
+                        <div class="btn-group">
+                            <button class="btn btn-sm btn-danger"><a th:href="@{/insertHschedule/{scid}/{week}/{did}/{time}(scid=${thursdayA.Scid},week=4,did=${did},time=1)}" style="color: white">编辑</a></button>
+                            <button class="btn btn-sm btn-danger"><a th:href="@{/delectHschedule/{scid}/{did}(scid=${thursdayA.Scid},did=${did})}" style="color: white">删除</a></button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>星期五早上</td>
+                    <td th:text="${fridayM.registerLimited}"></td>
+                    <td>
+                        <div class="btn-group">
+                            <button class="btn btn-sm btn-danger"><a th:href="@{/insertHschedule/{scid}/{week}/{did}/{time}(scid=${fridayM.Scid},week=5,did=${did},time=0)}" style="color: white">编辑</a></button>
+                            <button class="btn btn-sm btn-danger"><a th:href="@{/delectHschedule/{scid}/{did}(scid=${fridayM.Scid},did=${did})}" style="color: white">删除</a></button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>星期五下午</td>
+                    <td th:text="${fridayA.registerLimited}"></td>
+                    <td>
+                        <div class="btn-group">
+                            <button class="btn btn-sm btn-danger"><a th:href="@{/insertHschedule/{scid}/{week}/{did}/{time}(scid=${fridayA.Scid},week=5,did=${did},time=1)}" style="color: white">编辑</a></button>
+                            <button class="btn btn-sm btn-danger"><a th:href="@{/delectHschedule/{scid}/{did}(scid=${fridayA.Scid},did=${did})}" style="color: white">删除</a></button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>星期六早上</td>
+                    <td th:text="${saturdayM.registerLimited}"></td>
+                    <td>
+                        <div class="btn-group">
+                            <button class="btn btn-sm btn-danger"><a th:href="@{/insertHschedule/{scid}/{week}/{did}/{time}(scid=${saturdayM.Scid},week=6,did=${did},time=0)}" style="color: white">编辑</a></button>
+                            <button class="btn btn-sm btn-danger"><a th:href="@{/delectHschedule/{scid}/{did}(scid=${saturdayM.Scid},did=${did})}" style="color: white">删除</a></button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>星期六下午</td>
+                    <td th:text="${saturdayA.registerLimited}"></td>
+                    <td>
+                        <div class="btn-group">
+                            <button class="btn btn-sm btn-danger"><a th:href="@{/insertHschedule/{scid}/{week}/{did}/{time}(scid=${saturdayA.Scid},week=6,did=${did},time=1)}" style="color: white">编辑</a></button>
+                            <button class="btn btn-sm btn-danger"><a th:href="@{/delectHschedule/{scid}/{did}(scid=${saturdayA.Scid},did=${did})}" style="color: white">删除</a></button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>星期日早上</td>
+                    <td th:text="${sundayM.registerLimited}"></td>
+                    <td>
+                        <div class="btn-group">
+                            <button class="btn btn-sm btn-danger"><a th:href="@{/insertHschedule/{scid}/{week}/{did}/{time}(scid=${sundayM.Scid},week=0,did=${did},time=0)}" style="color: white">编辑</a></button>
+                            <button class="btn btn-sm btn-danger"><a th:href="@{/delectHschedule/{scid}/{did}(scid=${sundayM.Scid},did=${did})}" style="color: white">删除</a></button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>星期日下午</td>
+                    <td th:text="${sundayA.registerLimited}"></td>
+                    <td>
+                        <div class="btn-group">
+                            <button class="btn btn-sm btn-danger"><a th:href="@{/insertHschedule/{scid}/{week}/{did}/{time}(scid=${sundayA.Scid},week=0,did=${did},time=1)}" style="color: white">编辑</a></button>
+                            <button class="btn btn-sm btn-danger"><a th:href="@{/delectHschedule/{scid}/{did}(scid=${sundayA.Scid},did=${did})}" style="color: white">删除</a></button>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <!--end：信息显示表格-->
+        <!--            <ul class="pagination">-->
+        <!--                <li th:if="${pageInfo.hasPreviousPage}" class="page-item"><a class="page-link" th:href="@{/Mindex?pageNum=1}">&lt;&lt;</a></li>-->
+        <!--                <li th:if="${not pageInfo.hasPreviousPage}" class="page-item disabled"><a class="page-link" th:href="@{/Mindex?pageNum=1}">&lt;&lt;</a></li>-->
+
+        <!--                <li th:if="${pageInfo.hasPreviousPage}" class="page-item"><a class="page-link" th:href="@{/Mindex?pageNum=}+${pageInfo.prePage}">&lt;</a></li>-->
+        <!--                <li th:if="${not pageInfo.hasPreviousPage}" class="page-item disabled"><a class="page-link" th:href="@{/Mindex?pageNum=}+${pageInfo.prePage}">&lt;</a></li>-->
+
+
+        <!--                <li th:each="page:${pageInfo.navigatepageNums}" th:class="${pageInfo.pageNum==page}? 'active':''"><a class="page-link" th:href="@{/Mindex?pageNum=}+${page}" th:text="${page}"></a></li>-->
+
+
+        <!--                <li th:if="${pageInfo.hasNextPage}" class="page-item"><a class="page-link" th:href="@{/Mindex?pageNum=}+${pageInfo.nextPage}">&gt;</a></li>-->
+        <!--                <li th:if="${not pageInfo.hasNextPage}" class="page-item disabled"><a class="page-link" th:href="@{/Mindex?pageNum=}+${pageInfo.nextPage}">&gt;</a></li>-->
+
+        <!--                <li th:if="${pageInfo.hasNextPage}" class="page-item"><a class="page-link" th:href="@{/Mindex?pageNum=}+${pageInfo.pages}">&gt;&gt;</a></li>-->
+        <!--                <li th:if="${not pageInfo.hasNextPage}" class="page-item disabled"><a class="page-link" th:href="@{/Mindex?pageNum=}+${pageInfo.pages}">&gt;&gt;</a></li>-->
+        <!--            </ul>-->
+        <!--        </div>-->
+
+
+        <!--    <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">-->
+        <!--        <a href="/insertdepartment"><button type="button" class="btn btn-default btn-lg"><span class="glyphicon glyphicon-plus"></span>添加</button></a>-->
+        <!--        <button type="button" class="btn btn-default btn-lg"><span class="glyphicon glyphicon-refresh"></span>刷新</button>-->
+        <!--    </div>-->
+    </div>
+</div>
+</body>
+</html>

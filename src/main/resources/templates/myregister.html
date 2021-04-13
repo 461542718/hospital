@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+
+    <title>挂号预约系统</title>
+    <link rel="stylesheet" href="../css/bootstrap.min.css">
+    <link rel="stylesheet" href="../css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="../css/hospital.css">
+    <link rel="stylesheet" href="../css/bootstrapValidator.css">
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
+    <!--    <script-->
+    <!--            src="https://code.jquery.com/jquery-3.4.1.min.js"-->
+    <!--            integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="-->
+    <!--            crossorigin="anonymous"></script>-->
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="../js/bootstrapValidator.js"></script>
+    <script src="../js/zh_CN.js"></script>
+    <script type="text/javascript" src="../js/validate.js"></script>
+    <script type="text/javascript" src="../js/hospital.js"></script>
+
+</head>
+<script type="application/javascript">
+    window.onload = function () {
+        var closable=window.localStorage.getItem("closable");
+        if(closable){
+            window.close();
+            window.localStorage.removeItem("closable");
+        }
+    }
+</script>
+<body>
+
+<div th:insert="navigation::nav"></div>
+
+<!-- begin:用户预约列表 -->
+<div>
+    <h4>当前预约情况：</h4>
+    <div class="card-body" >
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th>医院名</th>
+                <th>预约科室</th>
+                <th>预约医生</th>
+                <th>就诊时间</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="item:${newpageInfo.list}">
+                <td th:text="${item.hospitalName}"></td>
+                <td th:text="${item.Dpmtname}"></td>
+                <td th:text="${item.Dname}"></td>
+                <td th:text="${#dates.format(item.visitDate,'yyyy-MM-dd')}+${item.time==0?'上午':'下午'}"></td>
+                <td>
+                    <div class="btn-group">
+                        <a style="color: white"><button class="btn btn-sm btn-danger" id="btn_delete" name="btn_delete">取消预约</button></a>
+                        <script type="application/javascript">
+                            $("#btn_delete").click(function () {
+                                $("#myModalLabel").text("取消预约");
+                                $('#myModal').modal();
+                            });
+                        </script>
+                        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                        <h4 class="modal-title" id="myModalLabel">取消预约</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p>是否取消这次预约？</p>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-default" data-dismiss="modal"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span>关闭</button>
+                                        <a th:href="'/deleteregister/'+${item.Rid}"><button type="button" id="btn_submit" class="btn btn-primary" ><span class="glyphicon glyphicon-ok"  ></span>确认</button></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <h4>历史预约：</h4>
+    <div class="card-body" >
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th>医院名</th>
+                <th>预约科室</th>
+                <th>预约医生</th>
+                <th>就诊时间</th>
+                <th>状态</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="item:${prepageInfo.list}">
+                <td th:text="${item.hospitalName}"></td>
+                <td th:text="${item.Dpmtname}"></td>
+                <td th:text="${item.Dname}"></td>
+                <td th:text="${#dates.format(item.visitDate,'yyyy-MM-dd')}+${item.time==0?'上午':'下午'}"></td>
+                <td th:text="${item.Rstatus==1?'已取消':'已过期'}">
+                <!--                <td>-->
+                <!--                    <div class="btn-group">-->
+                <!--                        <a th:href="'/insertdepartment/'+${item.dpmtid}" style="color: white"><button class="btn btn-sm btn-danger">编辑</button></a>-->
+                <!--                        <a th:href="'/delectdepartment/'+${item.dpmtid}" style="color: white"><button class="btn btn-sm btn-danger">删除</button></a>-->
+                <!--                    </div>-->
+                <!--                </td>-->
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+</body>
+</html>

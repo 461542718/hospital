@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+
+    <title>挂号预约系统</title>
+    <link rel="stylesheet" href="../css/bootstrap.min.css">
+    <link rel="stylesheet" href="../css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="../css/hospital.css">
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
+    <!--    <script-->
+    <!--            src="https://code.jquery.com/jquery-3.4.1.min.js"-->
+    <!--            integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="-->
+    <!--            crossorigin="anonymous"></script>-->
+    <script src="../js/bootstrap.min.js"></script>
+
+</head>
+<script type="application/javascript">
+    window.onload = function () {
+        var closable=window.localStorage.getItem("closable");
+        if(closable){
+            window.close();
+            window.localStorage.removeItem("closable");
+        }
+    }
+</script>
+<body>
+
+<div th:insert="Mnavigation::nav"></div>
+
+<!-- begin:添加一个添加医院表单 -->
+<div>
+    <form id="insert_modal" class="form-horizontal" name="insert_modal" action="/inserthospital" method="post">
+        <input type="hidden" name="Hid" th:value="${Hid}">
+            <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
+                <ul class="nav nav-tabs">
+                    <li role="presentation" class="active"><a href="/Mindex">医院登记</a></li>
+                    <li role="presentation"><a href="/doctormanage">医生登记</a></li>
+                    <li role="presentation"><a href="/departmentmanage">科室登记</a></li>
+                    <li role="presentation"><a href="/hospitaldepartmentmanage">医院科室登记</a></li>
+                    <li role="presentation"><a href="/registermanage">挂号登记</a></li>
+                    <li role="presentation"><a href="/noticemanage">发布公告</a></li>
+                    <li role="presentation"><a href="/Mapplymanage">申请审核</a></li>
+                </ul>
+
+                    <div class="form-group">
+                        <div>
+                            <label>医院名称</label>
+                            <input type="text" class="form-control" id="insert_Hname" th:value="${Hname}"
+                                   name="Hname" placeholder="请输入医院名称" autocomplete="off"/> <span
+                                class="help-block"></span>
+                        </div>
+                        <div>
+                            <label>医院地址</label>
+                            <input type="address" class="form-control" id="insert_Haddress" th:value="${Haddress}"
+                                   name="Haddress" placeholder="请输入医院地址" autocomplete="off"/> <span
+                                class="help-block"></span>
+                        </div>
+                        <div>
+                            <label>医院电话</label>
+                            <input type="tel" class="form-control" id="insert_Htel"  th:value="${Htel}"
+                                   name="Htel" placeholder="请输入医院电话" autocomplete="off"/> <span
+                                class="help-block"></span>
+                        </div>
+                        <div>
+                            <label>医院级别</label>
+                            <input type="level" class="form-control" id="insert_Hlevel" th:value="${Hlevel}"
+                                   name="Hlevel" placeholder="请输入医院级别" autocomplete="off"/> <span
+                                class="help-block"></span>
+                        </div>
+                        <div>
+                            <label>医院擅长科室</label>
+                            <input type="major" class="form-control" id="insert_Hmajor" th:value="${Hmajor}"
+                                   name="Hmajor" placeholder="请输入医院擅长科室" autocomplete="off"/> <span
+                                class="help-block"></span>
+                        </div>
+                        <div>
+                            <label>医院简介</label>
+                            <input type="info" class="form-control" id="insert_Hinfo" th:value="${Hinfo}"
+                                   name="Hinfo" placeholder="请输入医院简介" autocomplete="off"/> <span
+                                class="help-block"></span>
+                        </div>
+                        <div>
+                            <label>医院密码</label>
+                            <input type="info" class="form-control" id="insert_Hpassword" th:value="${password}"
+                                   name="password" placeholder="请输入医院密码" autocomplete="off"/> <span
+                                class="help-block"></span>
+                        </div>
+                    </div>
+            </div>
+        <!-- begin:按钮 -->
+        <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
+            <button type="submit" class="btn btn-default btn-lg"><span class="glyphicon glyphicon-plus"></span>添加</button>
+            <button type="button" class="btn btn-default btn-lg"><span class="glyphicon glyphicon-refresh"></span>刷新</button>
+        </div>
+        <!-- end:按钮 -->
+    </form>
+    <div th:if="${Hid!=null}" class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
+        <label>医院图片</label>
+        <div th:if="${hospitalPhoto==null}"><img src="../images/userphoto/default.jpeg" style="width: 150px;" class="img-thumbnail"></div>
+        <div th:if="${hospitalPhoto!=null}"><img th:src="${hospitalPhoto}" style="width: 150px;" class="img-thumbnail"></div>
+        <form id="uploadphoto" method="post" action="/uploadHphoto" enctype="multipart/form-data">
+            <input type="hidden" name="Hid" th:value="${Hid}">
+            <input type="file" id="photo" name="photo"><br>
+            <input type="submit" value="更改医院照片">
+        </form>
+    </div>
+</div>
+
+</body>
+</html>

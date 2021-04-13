@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+
+    <title>挂号预约系统</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="css/hospital.css">
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
+    <!--    <script-->
+    <!--            src="https://code.jquery.com/jquery-3.4.1.min.js"-->
+    <!--            integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="-->
+    <!--            crossorigin="anonymous"></script>-->
+    <script src="js/bootstrap.min.js"></script>
+    <script type="application/javascript" src="js/hospital.js"></script>
+</head>
+<script type="application/javascript">
+    window.onload = function () {
+        var closable=window.localStorage.getItem("closable");
+        if(closable){
+            window.close();
+            window.localStorage.removeItem("closable");
+        }
+    }
+</script>
+<body>
+
+<div th:insert="Hnavigation::nav"></div>
+
+<!-- begin:添加一个登录表单 -->
+<div>
+    <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
+
+
+        <!-- begin:主页 -->
+        <div>
+            <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
+                <ul class="nav nav-tabs">
+                    <!--                    <li role="presentation" ><a href="/Mindex">医院登记</a></li>-->
+                    <li role="presentation"><a href="/Hindex">科室登记</a></li>
+                    <li role="presentation"><a href="/Hdoctormanage">医生登记</a></li>
+                    <li role="presentation"  class="active"><a href="/Happlymanage">申请审核</a></li>
+                    <!--                    <li role="presentation"><a href="/registermanage">挂号登记</a></li>-->
+                    <!--                    <li role="presentation"><a href="/noticemanage">发布公告</a></li>-->
+                </ul>
+            </div>
+        </div>
+        <!--begin：信息显示表格-->
+        <div class="card-body" >
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>申请医生号</th>
+                    <th>申请内容</th>
+                    <th>批复备注</th>
+                    <th>申请时间</th>
+                    <th>批复时间</th>
+                    <th>状态</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="item:${pageInfo.list}">
+                    <td th:text="${item.id}"></td>
+                    <td th:text="${item.Did}"></td>
+                    <td th:text="${item.content}"></td>
+                    <td th:text="${item.note}"></td>
+                    <td th:text="${#dates.format(item.gmtCreate,'yyyy-MM-dd HH:mm')}"></td>
+                    <td th:text="${#dates.format(item.gmtModify,'yyyy-MM-dd HH:mm')}"></td>
+                    <div th:if="${item.status==0}"><td th:text="未批复"></td></div>
+                    <div th:if="${item.status==1}"><td th:text="已取消"></td></div>
+                    <div th:if="${item.status==2}"><td th:text="申请成功"></td></div>
+                    <div th:if="${item.status==3}"><td th:text="申请驳回"></td></div>
+                    <td>
+                        <div class="btn-group" th:if="${session.hospital!=null}">
+                            <a style="color: white"><button type="yes" onclick="yes(this)" th:data-id="${item.id}" class="btn btn-sm btn-danger" th:id="'btn_yes'+${item.id}" th:name="'btn_yes'+${item.id}">批准</button></a>
+                            <div class="modal fade" th:id="'myModal'+${item.id}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                            <h4 class="modal-title" id="myModalLabel">批准</h4>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p>是否已经处理并批准这次申请？</p>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-default" data-dismiss="modal"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span>关闭</button>
+                                            <a th:href="'/Happrove/'+${item.id}"><button type="button" id="btn_submit" class="btn btn-primary" ><span class="glyphicon glyphicon-ok"  ></span>确认</button></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <a style="color: white"><button type="no" onclick="no(this)" th:data-id="${item.id}" class="btn btn-sm btn-danger" th:id="'btn_no'+${item.id}" th:name="'btn_no'+${item.id}">驳回</button></a>
+                            <div class="modal fade" th:id="'myModal1'+${item.id}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel1">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                            <h4 class="modal-title" id="myModalLabel1">驳回</h4>
+                                        </div>
+                                        <form id="insert_modal" class="form-horizontal" name="insert_modal" action="/Hreject" method="post">
+                                            <div class="modal-body">
+                                                <div class="form-group">
+                                                    <input type="hidden" name="id" th:value="${item.id}">
+                                                    <div>
+                                                        <label>请输入驳回批复：</label>
+                                                        <input type="text" class="form-control" id="insert_note" th:value="${note}"
+                                                               name="note" placeholder="请输入驳回批复" autocomplete="off"/> <span
+                                                            class="help-block"></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-default" data-dismiss="modal"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span>关闭</button>
+                                                <button type="submit" id="btn_submit1" class="btn btn-primary" ><span class="glyphicon glyphicon-ok" ></span>确认</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <ul class="pagination">
+                <li th:if="${pageInfo.hasPreviousPage}" class="page-item"><a class="page-link" th:href="@{/Happlymanage?pageNum=1}">&lt;&lt;</a></li>
+                <li th:if="${not pageInfo.hasPreviousPage}" class="page-item disabled"><a class="page-link" th:href="@{/Happlymanage?pageNum=1}">&lt;&lt;</a></li>
+
+                <li th:if="${pageInfo.hasPreviousPage}" class="page-item"><a class="page-link" th:href="@{/Happlymanage?pageNum=}+${pageInfo.prePage}">&lt;</a></li>
+                <li th:if="${not pageInfo.hasPreviousPage}" class="page-item disabled"><a class="page-link" th:href="@{/Happlymanage?pageNum=}+${pageInfo.prePage}">&lt;</a></li>
+
+
+                <li th:each="page:${pageInfo.navigatepageNums}" th:class="${pageInfo.pageNum==page}? 'active':''"><a class="page-link" th:href="@{/Happlymanage?pageNum=}+${page}" th:text="${page}"></a></li>
+
+
+                <li th:if="${pageInfo.hasNextPage}" class="page-item"><a class="page-link" th:href="@{/Happlymanage?pageNum=}+${pageInfo.nextPage}">&gt;</a></li>
+                <li th:if="${not pageInfo.hasNextPage}" class="page-item disabled"><a class="page-link" th:href="@{/Happlymanage?pageNum=}+${pageInfo.nextPage}">&gt;</a></li>
+
+                <li th:if="${pageInfo.hasNextPage}" class="page-item"><a class="page-link" th:href="@{/Happlymanage?pageNum=}+${pageInfo.pages}">&gt;&gt;</a></li>
+                <li th:if="${not pageInfo.hasNextPage}" class="page-item disabled"><a class="page-link" th:href="@{/Happlymanage?pageNum=}+${pageInfo.pages}">&gt;&gt;</a></li>
+            </ul>
+        </div>
+        <!--end：信息显示表格-->
+    </div>
+    <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
+        <!--        <a th:if="${session.hospital!=null}" th:href="'/insertHdepartment/'+${session.hospital.getHospitalId()}"><button type="button" class="btn btn-default btn-lg"><span class="glyphicon glyphicon-plus"></span>添加</button></a>-->
+        <button type="button" class="btn btn-default btn-lg"><span class="glyphicon glyphicon-refresh"></span>刷新</button>
+    </div>
+</div>
+
+</body>
+</html>

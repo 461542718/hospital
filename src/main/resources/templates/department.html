@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+
+    <title>挂号预约系统</title>
+    <link rel="stylesheet" href="../css/bootstrap.min.css">
+    <link rel="stylesheet" href="../css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="../css/hospital.css">
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
+    <!--    <script-->
+    <!--            src="https://code.jquery.com/jquery-3.4.1.min.js"-->
+    <!--            integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="-->
+    <!--            crossorigin="anonymous"></script>-->
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="../js/hospital.js"></script>
+</head>
+<script type="application/javascript">
+    window.onload = function () {
+        var closable=window.localStorage.getItem("closable");
+        if(closable){
+            window.close();
+            window.localStorage.removeItem("closable");
+        }
+    }
+</script>
+<body>
+
+<div th:insert="navigation::nav"></div>
+
+<div class="container-fluid main">
+    <div class="row">
+        <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
+            <h2><span class="glyphicon glyphicon-home" aria-hidden="true"></span>  选择挂号科室</h2>
+            <hr>
+            <div  th:each="item:${departmentlist}">
+
+                <button class="btn btn-primary col-lg-1 col-md-12 col-sm-12 col-xs-12" style="margin-left: 10px">
+                    <a th:text="${item.dpmtname}" th:href="@{/doctor(hospitalId=${Hid},dpmtid=${item.dpmtid})}" style="color: white"></a>
+                </button>
+
+                    <!--          获取当前的医院号      ${hospitaldepartments[itemStat.index].hospitalId}-->
+<!--                <div class="media-left">-->
+<!--                    <a href="#">-->
+<!--                        <img alt="160x160" width="150px" class="media-object img-thumbnail" src="images/userphoto/default.jpg">-->
+<!--                    </a>-->
+<!--                </div>-->
+<!--                <div class="media-body">-->
+<!--                    <h4 class="media-heading">-->
+<!--                        <a th:href="@{'/hospital/'+${item.hospitalId}}" th:text="${item.hospitalName}"></a>-->
+<!--                    </h4>-->
+<!--                    <span th:text="'医院电话：'+${item.hospitalTel}"></span>-->
+<!--                    <br/>-->
+<!--                    <span th:text="'医院地址：'+${item.hospitalAddr}"></span>-->
+<!--                    <span th:text="'医院级别：'+${item.hospitalLevel}"></span>-->
+<!--                    <br/>-->
+<!--                    <button id="btn" onclick="toggle(this)" th:data-id="${item.hospitalId}">详情</button>-->
+<!--                    <div th:id="${'spread-'+item.hospitalId}"  style="display:none">-->
+<!--                        <span th:text="'医院擅长科室：'+${item.hospitalMajor}"></span>-->
+<!--                        <br/>-->
+<!--                        <span th:text="'医院简介：'+${item.hospitalInfo}"></span>-->
+<!--                    </div>-->
+<!--                </div>-->
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12" style="float:right">
+            <a href="/"><button type="button" class="btn btn-default btn-lg"><span class="glyphicon glyphicon-home"></span>返回首页</button></a>
+        </div>
+        <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12 intorduceblank" style="float:right">
+            <h3>科室选择引导</h3>
+            <span>
+                <p>·上半部分为该医院可选择科室，直接点击查看该科室医生</p><br>
+                <p>·下半部分为根据您近期状况简介为您推荐的挂号科室，仅供参考</p><br>
+            <span/>
+        </div>
+        <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12" style="margin-top: 100px">
+            <p><span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span>  不知道挂哪个科室？请在个人信息栏近期情况处填写您的身体状况问题，再进入此页面可看到下方推荐科室。</p>
+            <hr>
+            <div  th:each="item:${TJdepartments}">
+
+                <button class="btn btn-primary col-lg-1 col-md-12 col-sm-12 col-xs-12" style="margin-left: 10px">
+                    <a th:text="${item.departmentname}"  style="color: white"></a>
+                </button>
+            </div>
+        </div>
+
+    </div>
+</div>
+</body>
+</html>

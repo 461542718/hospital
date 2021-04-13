@@ -1,0 +1,1 @@
+alter table manager modify token varchar(36);

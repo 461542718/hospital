@@ -1,0 +1,1589 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+
+    <title>挂号预约系统</title>
+    <link rel="stylesheet" href="../css/bootstrap.min.css">
+    <link rel="stylesheet" href="../css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="../css/hospital.css">
+    <link rel="stylesheet" type="text/css" href="../css/base.css" />
+    <link rel="stylesheet" type="text/css" href="../css/layout.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/ui.css">
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
+    <!--    <script-->
+    <!--            src="https://code.jquery.com/jquery-3.4.1.min.js"-->
+    <!--            integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="-->
+    <!--            crossorigin="anonymous"></script>-->
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="../js/hospital.js"></script>
+    <script src="../js/ui.js"></script>
+</head>
+<script type="application/javascript">
+    window.onload = function () {
+        var closable=window.localStorage.getItem("closable");
+        if(closable){
+            window.close();
+            window.localStorage.removeItem("closable");
+        }
+    }
+</script>
+<body>
+
+<div th:insert="navigation::nav"></div>
+
+<div class="container-fluid main">
+    <div class="row">
+        <h3 th:text="${hospitalName}"></h3>
+        <h3 th:text="${dpmtname}"></h3>
+        <h3 th:text="${dname}"></h3>
+    </div>
+    <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
+        <div class="card-body" >
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th>日期</th>
+                    <th>星期</th>
+                    <th>时段</th>
+                    <th>号数</th>
+                </tr>
+                </thead>
+                <tbody>
+                <div th:switch="${#dates.format(currentTime+86400000,'EEE')}">
+                    <div th:case="'星期一'">
+                        <tr>
+                            <td th:text="${#dates.format(currentTime+86400000,'yyyy-MM-dd')}"></td>
+                            <td th:text="${#dates.format(currentTime+86400000,'EEE')}"></td>
+                            <td>早上</td>
+                            <td th:text="${mondayM.registerLimited}"></td>
+                            <div th:if="${mondayM.registerLimited>0 and session.user != null}">
+                                <td>
+                                    <form id="insert_modal" class="form-horizontal" name="insert_modal" action="/insertregister" method="post">
+                                        <input type="hidden" name="scid" th:value="${mondayM.scid}">
+                                        <input type="hidden" name="visitDate" th:value="${currentTime+86400000}">
+                                        <input type="hidden" name="cardnumber" th:value="${session.user.cardnumber}">
+                                        <button type="submit" class="btn btn-sm btn-danger"><a style="color: white">预约</a></button>
+                                    </form>
+                                </td>
+                            </div>
+                        </tr>
+                        <tr>
+                            <td th:text="${#dates.format(currentTime+86400000,'yyyy-MM-dd')}"></td>
+                            <td th:text="${#dates.format(currentTime+86400000,'EEE')}"></td>
+                            <td>下午</td>
+                            <td th:text="${mondayA.registerLimited}"></td>
+                            <div th:if="${mondayA.registerLimited>0 and session.user != null}">
+                                <td>
+                                    <form id="insert_modal" class="form-horizontal" name="insert_modal" action="/insertregister" method="post">
+                                        <input type="hidden" name="scid" th:value="${mondayA.scid}">
+                                        <input type="hidden" name="visitDate" th:value="${currentTime+86400000}">
+                                        <input type="hidden" name="cardnumber" th:value="${session.user.cardnumber}">
+                                        <button type="submit" class="btn btn-sm btn-danger"><a style="color: white">预约</a></button>
+                                    </form>
+                                </td>
+                            </div>
+                        </tr>
+                    </div>
+                    <div th:case="'星期二'">
+                        <tr>
+                            <td th:text="${#dates.format(currentTime+86400000,'yyyy-MM-dd')}"></td>
+                            <td th:text="${#dates.format(currentTime+86400000,'EEE')}"></td>
+                            <td>早上</td>
+                            <td th:text="${tuesdayM.registerLimited}"></td>
+                            <div th:if="${tuesdayM.registerLimited>0 and session.user != null}">
+                                <td>
+                                    <form id="insert_modal" class="form-horizontal" name="insert_modal" action="/insertregister" method="post">
+                                        <input type="hidden" name="scid" th:value="${tuesdayM.scid}">
+                                        <input type="hidden" name="visitDate" th:value="${currentTime+86400000}">
+                                        <input type="hidden" name="cardnumber" th:value="${session.user.cardnumber}">
+                                        <button type="submit" class="btn btn-sm btn-danger"><a style="color: white">预约</a></button>
+                                    </form>
+                                </td>
+                            </div>
+                        </tr>
+                        <tr>
+                            <td th:text="${#dates.format(currentTime+86400000,'yyyy-MM-dd')}"></td>
+                            <td th:text="${#dates.format(currentTime+86400000,'EEE')}"></td>
+                            <td>下午</td>
+                            <td th:text="${tuesdayA.registerLimited}"></td>
+                            <div th:if="${tuesdayA.registerLimited>0 and session.user != null}">
+                                <td>
+                                    <form id="insert_modal" class="form-horizontal" name="insert_modal" action="/insertregister" method="post">
+                                        <input type="hidden" name="scid" th:value="${tuesdayA.scid}">
+                                        <input type="hidden" name="visitDate" th:value="${currentTime+86400000}">
+                                        <input type="hidden" name="cardnumber" th:value="${session.user.cardnumber}">
+                                        <button type="submit" class="btn btn-sm btn-danger"><a style="color: white">预约</a></button>
+                                    </form>
+                                </td>
+                            </div>
+                        </tr>
+                    </div>
+                    <div th:case="'星期三'">
+                        <tr>
+                            <td th:text="${#dates.format(currentTime+86400000,'yyyy-MM-dd')}"></td>
+                            <td th:text="${#dates.format(currentTime+86400000,'EEE')}"></td>
+                            <td>早上</td>
+                            <td th:text="${wednesdayM.registerLimited}"></td>
+                            <div th:if="${wednesdayM.registerLimited>0 and session.user != null}">
+                                <td>
+                                    <form id="insert_modal" class="form-horizontal" name="insert_modal" action="/insertregister" method="post">
+                                        <input type="hidden" name="scid" th:value="${wednesdayM.scid}">
+                                        <input type="hidden" name="visitDate" th:value="${currentTime+86400000}">
+                                        <input type="hidden" name="cardnumber" th:value="${session.user.cardnumber}">
+                                        <button type="submit" class="btn btn-sm btn-danger"><a style="color: white">预约</a></button>
+                                    </form>
+                                </td>
+                            </div>
+                        </tr>
+                        <tr>
+                            <td th:text="${#dates.format(currentTime+86400000,'yyyy-MM-dd')}"></td>
+                            <td th:text="${#dates.format(currentTime+86400000,'EEE')}"></td>
+                            <td>下午</td>
+                            <td th:text="${wednesdayA.registerLimited}"></td>
+                            <div th:if="${wednesdayA.registerLimited>0 and session.user != null}">
+                                <td>
+                                    <form id="insert_modal" class="form-horizontal" name="insert_modal" action="/insertregister" method="post">
+                                        <input type="hidden" name="scid" th:value="${wednesdayA.scid}">
+                                        <input type="hidden" name="visitDate" th:value="${currentTime+86400000}">
+                                        <input type="hidden" name="cardnumber" th:value="${session.user.cardnumber}">
+                                        <button type="submit" class="btn btn-sm btn-danger"><a style="color: white">预约</a></button>
+                                    </form>
+                                </td>
+                            </div>
+                        </tr>
+                    </div>
+                    <div th:case="'星期四'">
+                        <tr>
+                            <td th:text="${#dates.format(currentTime+86400000,'yyyy-MM-dd')}"></td>
+                            <td th:text="${#dates.format(currentTime+86400000,'EEE')}"></td>
+                            <td>早上</td>
+                            <td th:text="${thursdayM.registerLimited}"></td>
+                            <div th:if="${thursdayM.registerLimited>0 and session.user != null}">
+                                <td>
+                                    <form id="insert_modal" class="form-horizontal" name="insert_modal" action="/insertregister" method="post">
+                                        <input type="hidden" name="scid" th:value="${thursdayM.scid}">
+                                        <input type="hidden" name="visitDate" th:value="${currentTime+86400000}">
+                                        <input type="hidden" name="cardnumber" th:value="${session.user.cardnumber}">
+                                        <button type="submit" class="btn btn-sm btn-danger"><a style="color: white">预约</a></button>
+                                    </form>
+                                </td>
+                            </div>
+                        </tr>
+                        <tr>
+                            <td th:text="${#dates.format(currentTime+86400000,'yyyy-MM-dd')}"></td>
+                            <td th:text="${#dates.format(currentTime+86400000,'EEE')}"></td>
+                            <td>下午</td>
+                            <td th:text="${thursdayA.registerLimited}"></td>
+                            <div th:if="${thursdayA.registerLimited>0 and session.user != null}">
+                                <td>
+                                    <form id="insert_modal" class="form-horizontal" name="insert_modal" action="/insertregister" method="post">
+                                        <input type="hidden" name="scid" th:value="${thursdayA.scid}">
+                                        <input type="hidden" name="visitDate" th:value="${currentTime+86400000}">
+                                        <input type="hidden" name="cardnumber" th:value="${session.user.cardnumber}">
+                                        <button type="submit" class="btn btn-sm btn-danger"><a style="color: white">预约</a></button>
+                                    </form>
+                                </td>
+                            </div>
+                        </tr>
+                    </div>
+                    <div th:case="'星期五'">
+                        <tr>
+                            <td th:text="${#dates.format(currentTime+86400000,'yyyy-MM-dd')}"></td>
+                            <td th:text="${#dates.format(currentTime+86400000,'EEE')}"></td>
+                            <td>早上</td>
+                            <td th:text="${fridayM.registerLimited}"></td>
+                            <div th:if="${fridayM.registerLimited>0 and session.user != null}">
+                                <td>
+                                    <form id="insert_modal" class="form-horizontal" name="insert_modal" action="/insertregister" method="post">
+                                        <input type="hidden" name="scid" th:value="${fridayM.scid}">
+                                        <input type="hidden" name="visitDate" th:value="${currentTime+86400000}">
+                                        <input type="hidden" name="cardnumber" th:value="${session.user.cardnumber}">
+                                        <button type="submit" class="btn btn-sm btn-danger"><a style="color: white">预约</a></button>
+                                    </form>
+                                </td>
+                            </div>
+                        </tr>
+                        <tr>
+                            <td th:text="${#dates.format(currentTime+86400000,'yyyy-MM-dd')}"></td>
+                            <td th:text="${#dates.format(currentTime+86400000,'EEE')}"></td>
+                            <td>下午</td>
+                            <td th:text="${fridayA.registerLimited}"></td>
+                            <div th:if="${fridayA.registerLimited>0 and session.user != null}">
+                                <td>
+                                    <form id="insert_modal" class="form-horizontal" name="insert_modal" action="/insertregister" method="post">
+                                        <input type="hidden" name="scid" th:value="${fridayA.scid}">
+                                        <input type="hidden" name="visitDate" th:value="${currentTime+86400000}">
+                                        <input type="hidden" name="cardnumber" th:value="${session.user.cardnumber}">
+                                        <button type="submit" class="btn btn-sm btn-danger"><a style="color: white">预约</a></button>
+                                    </form>
+                                </td>
+                            </div>
+                        </tr>
+                    </div>
+                    <div th:case="'星期六'">
+                        <tr>
+                            <td th:text="${#dates.format(currentTime+86400000,'yyyy-MM-dd')}"></td>
+                            <td th:text="${#dates.format(currentTime+86400000,'EEE')}"></td>
+                            <td>早上</td>
+                            <td th:text="${saturdayM.registerLimited}"></td>
+                            <div th:if="${saturdayM.registerLimited>0 and session.user != null}">
+                                <td>
+                                    <form id="insert_modal" class="form-horizontal" name="insert_modal" action="/insertregister" method="post">
+                                        <input type="hidden" name="scid" th:value="${saturdayM.scid}">
+                                        <input type="hidden" name="visitDate" th:value="${currentTime+86400000}">
+                                        <input type="hidden" name="cardnumber" th:value="${session.user.cardnumber}">
+                                        <button type="submit" class="btn btn-sm btn-danger"><a style="color: white">预约</a></button>
+                                    </form>
+                                </td>
+                            </div>
+                        </tr>
+                        <tr>
+                            <td th:text="${#dates.format(currentTime+86400000,'yyyy-MM-dd')}"></td>
+                            <td th:text="${#dates.format(currentTime+86400000,'EEE')}"></td>
+                            <td>下午</td>
+                            <td th:text="${saturdayA.registerLimited}"></td>
+                            <div th:if="${saturdayA.registerLimited>0 and session.user != null}">
+                                <td>
+                                    <form id="insert_modal" class="form-horizontal" name="insert_modal" action="/insertregister" method="post">
+                                        <input type="hidden" name="scid" th:value="${saturdayA.scid}">
+                                        <input type="hidden" name="visitDate" th:value="${currentTime+86400000}">
+                                        <input type="hidden" name="cardnumber" th:value="${session.user.cardnumber}">
+                                        <button type="submit" class="btn btn-sm btn-danger"><a style="color: white">预约</a></button>
+                                    </form>
+                                </td>
+                            </div>
+                        </tr>
+                    </div>
+                    <div th:case="'星期日'">
+                        <tr>
+                            <td th:text="${#dates.format(currentTime+86400000,'yyyy-MM-dd')}"></td>
+                            <td th:text="${#dates.format(currentTime+86400000,'EEE')}"></td>
+                            <td>早上</td>
+                            <td th:text="${sundayM.registerLimited}"></td>
+                            <div th:if="${sundayM.registerLimited>0 and session.user != null}">
+                                <td>
+                                    <form id="insert_modal" class="form-horizontal" name="insert_modal" action="/insertregister" method="post">
+                                        <input type="hidden" name="scid" th:value="${sundayM.scid}">
+                                        <input type="hidden" name="visitDate" th:value="${currentTime+86400000}">
+                                        <input type="hidden" name="cardnumber" th:value="${session.user.cardnumber}">
+                                        <button type="submit" class="btn btn-sm btn-danger"><a style="color: white">预约</a></button>
+                                    </form>
+                                </td>
+                            </div>
+                        </tr>
+                        <tr>
+                            <td th:text="${#dates.format(currentTime+86400000,'yyyy-MM-dd')}"></td>
+                            <td th:text="${#dates.format(currentTime+86400000,'EEE')}"></td>
+                            <td>下午</td>
+                            <td th:text="${sundayA.registerLimited}"></td>
+                            <div th:if="${sundayA.registerLimited>0 and session.user != null}">
+                                <td>
+                                    <form id="insert_modal" class="form-horizontal" name="insert_modal" action="/insertregister" method="post">
+                                        <input type="hidden" name="scid" th:value="${sundayA.scid}">
+                                        <input type="hidden" name="visitDate" th:value="${currentTime+86400000}">
+                                        <input type="hidden" name="cardnumber" th:value="${session.user.cardnumber}">
+                                        <button type="submit" class="btn btn-sm btn-danger"><a style="color: white">预约</a></button>
+                                    </form>
+                                </td>
+                            </div>
+                        </tr>
+                    </div>
+                </div>
+                <div th:switch="${#dates.format(currentTime+172800000,'EEE')}">
+                    <div th:case="'星期一'">
+                        <tr>
+                            <td th:text="${#dates.format(currentTime+172800000,'yyyy-MM-dd')}"></td>
+                            <td th:text="${#dates.format(currentTime+172800000,'EEE')}"></td>
+                            <td>早上</td>
+                            <td th:text="${mondayM.registerLimited}"></td>
+                            <div th:if="${mondayM.registerLimited>0 and session.user != null}">
+                                <td>
+                                    <form id="insert_modal" class="form-horizontal" name="insert_modal" action="/insertregister" method="post">
+                                        <input type="hidden" name="scid" th:value="${mondayM.scid}">
+                                        <input type="hidden" name="visitDate" th:value="${currentTime+172800000}">
+                                        <input type="hidden" name="cardnumber" th:value="${session.user.cardnumber}">
+                                        <button type="submit" class="btn btn-sm btn-danger"><a style="color: white">预约</a></button>
+                                    </form>
+                                </td>
+                            </div>
+                        </tr>
+                        <tr>
+                            <td th:text="${#dates.format(currentTime+172800000,'yyyy-MM-dd')}"></td>
+                            <td th:text="${#dates.format(currentTime+172800000,'EEE')}"></td>
+                            <td>下午</td>
+                            <td th:text="${mondayA.registerLimited}"></td>
+                            <div th:if="${mondayA.registerLimited and session.user != null}">
+                                <td>
+                                    <form id="insert_modal" class="form-horizontal" name="insert_modal" action="/insertregister" method="post">
+                                        <input type="hidden" name="scid" th:value="${mondayA.scid}">
+                                        <input type="hidden" name="visitDate" th:value="${currentTime+172800000}">
+                                        <input type="hidden" name="cardnumber" th:value="${session.user.cardnumber}">
+                                        <button type="submit" class="btn btn-sm btn-danger"><a style="color: white">预约</a></button>
+                                    </form>
+                                </td>
+                            </div>
+                        </tr>
+                    </div>
+                    <div th:case="'星期二'">
+                        <tr>
+                            <td th:text="${#dates.format(currentTime+172800000,'yyyy-MM-dd')}"></td>
+                            <td th:text="${#dates.format(currentTime+172800000,'EEE')}"></td>
+                            <td>早上</td>
+                            <td th:text="${tuesdayM.registerLimited}"></td>
+                            <div th:if="${tuesdayM.registerLimited>0 and session.user != null}">
+                                <td>
+                                    <form id="insert_modal" class="form-horizontal" name="insert_modal" action="/insertregister" method="post">
+                                        <input type="hidden" name="scid" th:value="${tuesdayM.scid}">
+                                        <input type="hidden" name="visitDate" th:value="${currentTime+172800000}">
+                                        <input type="hidden" name="cardnumber" th:value="${session.user.cardnumber}">
+                                        <button type="submit" class="btn btn-sm btn-danger"><a style="color: white">预约</a></button>
+                                    </form>
+                                </td>
+                            </div>
+                        </tr>
+                        <tr>
+                            <td th:text="${#dates.format(currentTime+172800000,'yyyy-MM-dd')}"></td>
+                            <td th:text="${#dates.format(currentTime+172800000,'EEE')}"></td>
+                            <td>下午</td>
+                            <td th:text="${tuesdayA.registerLimited}"></td>
+                            <div th:if="${tuesdayA.registerLimited>0 and session.user != null}">
+                                <td>
+                                    <form id="insert_modal" class="form-horizontal" name="insert_modal" action="/insertregister" method="post">
+                                        <input type="hidden" name="scid" th:value="${tuesdayA.scid}">
+                                        <input type="hidden" name="visitDate" th:value="${currentTime+172800000}">
+                                        <input type="hidden" name="cardnumber" th:value="${session.user.cardnumber}">
+                                        <button type="submit" class="btn btn-sm btn-danger"><a style="color: white">预约</a></button>
+                                    </form>
+                                </td>
+                            </div>
+                        </tr>
+                    </div>
+                    <div th:case="'星期三'">
+                        <tr>
+                            <td th:text="${#dates.format(currentTime+172800000,'yyyy-MM-dd')}"></td>
+                            <td th:text="${#dates.format(currentTime+172800000,'EEE')}"></td>
+                            <td>早上</td>
+                            <td th:text="${wednesdayM.registerLimited}"></td>
+                            <div th:if="${wednesdayM.registerLimited>0 and session.user != null}">
+                                <td>
+                                    <form id="insert_modal" class="form-horizontal" name="insert_modal" action="/insertregister" method="post">
+                                        <input type="hidden" name="scid" th:value="${wednesdayM.scid}">
+                                        <input type="hidden" name="visitDate" th:value="${currentTime+172800000}">
+                                        <input type="hidden" name="cardnumber" th:value="${session.user.cardnumber}">
+                                        <button type="submit" class="btn btn-sm btn-danger"><a style="color: white">预约</a></button>
+                                    </form>
+                                </td>
+                            </div>
+                        </tr>
+                        <tr>
+                            <td th:text="${#dates.format(currentTime+172800000,'yyyy-MM-dd')}"></td>
+                            <td th:text="${#dates.format(currentTime+172800000,'EEE')}"></td>
+                            <td>下午</td>
+                            <td th:text="${wednesdayA.registerLimited}"></td>
+                            <div th:if="${wednesdayA.registerLimited>0 and session.user != null}">
+                                <td>
+                                    <form id="insert_modal" class="form-horizontal" name="insert_modal" action="/insertregister" method="post">
+                                        <input type="hidden" name="scid" th:value="${wednesdayA.scid}">
+                                        <input type="hidden" name="visitDate" th:value="${currentTime+172800000}">
+                                        <input type="hidden" name="cardnumber" th:value="${session.user.cardnumber}">
+                                        <button type="submit" class="btn btn-sm btn-danger"><a style="color: white">预约</a></button>
+                                    </form>
+                                </td>
+                            </div>
+                        </tr>
+                    </div>
+                    <div th:case="'星期四'">
+                        <tr>
+                            <td th:text="${#dates.format(currentTime+172800000,'yyyy-MM-dd')}"></td>
+                            <td th:text="${#dates.format(currentTime+172800000,'EEE')}"></td>
+                            <td>早上</td>
+                            <td th:text="${thursdayM.registerLimited}"></td>
+                            <div th:if="${thursdayM.registerLimited>0 and session.user != null}">
+                                <td>
+                                    <form id="insert_modal" class="form-horizontal" name="insert_modal" action="/insertregister" method="post">
+                                        <input type="hidden" name="scid" th:value="${thursdayM.scid}">
+                                        <input type="hidden" name="visitDate" th:value="${currentTime+172800000}">
+                                        <input type="hidden" name="cardnumber" th:value="${session.user.cardnumber}">
+                                        <button type="submit" class="btn btn-sm btn-danger"><a style="color: white">预约</a></button>
+                                    </form>
+                                </td>
+                            </div>
+                        </tr>
+                        <tr>
+                            <td th:text="${#dates.format(currentTime+172800000,'yyyy-MM-dd')}"></td>
+                            <td th:text="${#dates.format(currentTime+172800000,'EEE')}"></td>
+                            <td>下午</td>
+                            <td th:text="${thursdayA.registerLimited}"></td>
+                            <div th:if="${thursdayA.registerLimited>0 and session.user != null}">
+                                <td>
+                                    <form id="insert_modal" class="form-horizontal" name="insert_modal" action="/insertregister" method="post">
+                                        <input type="hidden" name="scid" th:value="${thursdayA.scid}">
+                                        <input type="hidden" name="visitDate" th:value="${currentTime+172800000}">
+                                        <input type="hidden" name="cardnumber" th:value="${session.user.cardnumber}">
+                                        <button type="submit" class="btn btn-sm btn-danger"><a style="color: white">预约</a></button>
+                                    </form>
+                                </td>
+                            </div>
+                        </tr>
+                    </div>
+                    <div th:case="'星期五'">
+                        <tr>
+                            <td th:text="${#dates.format(currentTime+172800000,'yyyy-MM-dd')}"></td>
+                            <td th:text="${#dates.format(currentTime+172800000,'EEE')}"></td>
+                            <td>早上</td>
+                            <td th:text="${fridayM.registerLimited}"></td>
+                            <div th:if="${fridayM.registerLimited>0 and session.user != null}">
+                                <td>
+                                    <form id="insert_modal" class="form-horizontal" name="insert_modal" action="/insertregister" method="post">
+                                        <input type="hidden" name="scid" th:value="${fridayM.scid}">
+                                        <input type="hidden" name="visitDate" th:value="${currentTime+172800000}">
+                                        <input type="hidden" name="cardnumber" th:value="${session.user.cardnumber}">
+                                        <button type="submit" class="btn btn-sm btn-danger"><a style="color: white">预约</a></button>
+                                    </form>
+                                </td>
+                            </div>
+                        </tr>
+                        <tr>
+                            <td th:text="${#dates.format(currentTime+172800000,'yyyy-MM-dd')}"></td>
+                            <td th:text="${#dates.format(currentTime+172800000,'EEE')}"></td>
+                            <td>下午</td>
+                            <td th:text="${fridayA.registerLimited}"></td>
+                            <div th:if="${fridayA.registerLimited>0 and session.user != null}">
+                                <td>
+                                    <form id="insert_modal" class="form-horizontal" name="insert_modal" action="/insertregister" method="post">
+                                        <input type="hidden" name="scid" th:value="${fridayA.scid}">
+                                        <input type="hidden" name="visitDate" th:value="${currentTime+172800000}">
+                                        <input type="hidden" name="cardnumber" th:value="${session.user.cardnumber}">
+                                        <button type="submit" class="btn btn-sm btn-danger"><a style="color: white">预约</a></button>
+                                    </form>
+                                </td>
+                            </div>
+                        </tr>
+                    </div>
+                    <div th:case="'星期六'">
+                        <tr>
+                            <td th:text="${#dates.format(currentTime+172800000,'yyyy-MM-dd')}"></td>
+                            <td th:text="${#dates.format(currentTime+172800000,'EEE')}"></td>
+                            <td>早上</td>
+                            <td th:text="${saturdayM.registerLimited}"></td>
+                            <div th:if="${saturdayM.registerLimited>0 and session.user != null}">
+                                <td>
+                                    <form id="insert_modal" class="form-horizontal" name="insert_modal" action="/insertregister" method="post">
+                                        <input type="hidden" name="scid" th:value="${saturdayM.scid}">
+                                        <input type="hidden" name="visitDate" th:value="${currentTime+172800000}">
+                                        <input type="hidden" name="cardnumber" th:value="${session.user.cardnumber}">
+                                        <button type="submit" class="btn btn-sm btn-danger"><a style="color: white">预约</a></button>
+                                    </form>
+                                </td>
+                            </div>
+                        </tr>
+                        <tr>
+                            <td th:text="${#dates.format(currentTime+172800000,'yyyy-MM-dd')}"></td>
+                            <td th:text="${#dates.format(currentTime+172800000,'EEE')}"></td>
+                            <td>下午</td>
+                            <td th:text="${saturdayA.registerLimited}"></td>
+                            <div th:if="${saturdayA.registerLimited>0 and session.user != null}">
+                                <td>
+                                    <form id="insert_modal" class="form-horizontal" name="insert_modal" action="/insertregister" method="post">
+                                        <input type="hidden" name="scid" th:value="${saturdayA.scid}">
+                                        <input type="hidden" name="visitDate" th:value="${currentTime+172800000}">
+                                        <input type="hidden" name="cardnumber" th:value="${session.user.cardnumber}">
+                                        <button type="submit" class="btn btn-sm btn-danger"><a style="color: white">预约</a></button>
+                                    </form>
+                                </td>
+                            </div>
+                        </tr>
+                    </div>
+                    <div th:case="'星期日'">
+                        <tr>
+                            <td th:text="${#dates.format(currentTime+172800000,'yyyy-MM-dd')}"></td>
+                            <td th:text="${#dates.format(currentTime+172800000,'EEE')}"></td>
+                            <td>早上</td>
+                            <td th:text="${sundayM.registerLimited}"></td>
+                            <div th:if="${sundayM.registerLimited>0 and session.user != null}">
+                                <td>
+                                    <form id="insert_modal" class="form-horizontal" name="insert_modal" action="/insertregister" method="post">
+                                        <input type="hidden" name="scid" th:value="${sundayM.scid}">
+                                        <input type="hidden" name="visitDate" th:value="${currentTime+172800000}">
+                                        <input type="hidden" name="cardnumber" th:value="${session.user.cardnumber}">
+                                        <button type="submit" class="btn btn-sm btn-danger"><a style="color: white">预约</a></button>
+                                    </form>
+                                </td>
+                            </div>
+                        </tr>
+                        <tr>
+                            <td th:text="${#dates.format(currentTime+172800000,'yyyy-MM-dd')}"></td>
+                            <td th:text="${#dates.format(currentTime+172800000,'EEE')}"></td>
+                            <td>下午</td>
+                            <td th:text="${sundayA.registerLimited}"></td>
+                            <div th:if="${sundayA.registerLimited>0 and session.user != null}">
+                                <td>
+                                    <form id="insert_modal" class="form-horizontal" name="insert_modal" action="/insertregister" method="post">
+                                        <input type="hidden" name="scid" th:value="${sundayA.scid}">
+                                        <input type="hidden" name="visitDate" th:value="${currentTime+172800000}">
+                                        <input type="hidden" name="cardnumber" th:value="${session.user.cardnumber}">
+                                        <button type="submit" class="btn btn-sm btn-danger"><a style="color: white">预约</a></button>
+                                    </form>
+                                </td>
+                            </div>
+                        </tr>
+                    </div>
+                </div>
+                <div th:switch="${#dates.format(currentTime+259200000,'EEE')}">
+                    <div th:case="'星期一'">
+                        <tr>
+                            <td th:text="${#dates.format(currentTime+259200000,'yyyy-MM-dd')}"></td>
+                            <td th:text="${#dates.format(currentTime+259200000,'EEE')}"></td>
+                            <td>早上</td>
+                            <td th:text="${mondayM.registerLimited}"></td>
+                            <div th:if="${mondayM.registerLimited>0 and session.user != null}">
+                                <td>
+                                    <form id="insert_modal" class="form-horizontal" name="insert_modal" action="/insertregister" method="post">
+                                        <input type="hidden" name="scid" th:value="${mondayM.scid}">
+                                        <input type="hidden" name="visitDate" th:value="${currentTime+259200000}">
+                                        <input type="hidden" name="cardnumber" th:value="${session.user.cardnumber}">
+                                        <button type="submit" class="btn btn-sm btn-danger"><a style="color: white">预约</a></button>
+                                    </form>
+                                </td>
+                            </div>
+                        </tr>
+                        <tr>
+                            <td th:text="${#dates.format(currentTime+259200000,'yyyy-MM-dd')}"></td>
+                            <td th:text="${#dates.format(currentTime+259200000,'EEE')}"></td>
+                            <td>下午</td>
+                            <td th:text="${mondayA.registerLimited}"></td>
+                            <div th:if="${mondayA.registerLimited>0 and session.user != null}">
+                                <td>
+                                    <form id="insert_modal" class="form-horizontal" name="insert_modal" action="/insertregister" method="post">
+                                        <input type="hidden" name="scid" th:value="${mondayA.scid}">
+                                        <input type="hidden" name="visitDate" th:value="${currentTime+259200000}">
+                                        <input type="hidden" name="cardnumber" th:value="${session.user.cardnumber}">
+                                        <button type="submit" class="btn btn-sm btn-danger"><a style="color: white">预约</a></button>
+                                    </form>
+                                </td>
+                            </div>
+                        </tr>
+                    </div>
+                    <div th:case="'星期二'">
+                        <tr>
+                            <td th:text="${#dates.format(currentTime+259200000,'yyyy-MM-dd')}"></td>
+                            <td th:text="${#dates.format(currentTime+259200000,'EEE')}"></td>
+                            <td>早上</td>
+                            <td th:text="${tuesdayM.registerLimited}"></td>
+                            <div th:if="${tuesdayM.registerLimited>0 and session.user != null}">
+                                <td>
+                                    <form id="insert_modal" class="form-horizontal" name="insert_modal" action="/insertregister" method="post">
+                                        <input type="hidden" name="scid" th:value="${tuesdayM.scid}">
+                                        <input type="hidden" name="visitDate" th:value="${currentTime+259200000}">
+                                        <input type="hidden" name="cardnumber" th:value="${session.user.cardnumber}">
+                                        <button type="submit" class="btn btn-sm btn-danger"><a style="color: white">预约</a></button>
+                                    </form>
+                                </td>
+                            </div>
+                        </tr>
+                        <tr>
+                            <td th:text="${#dates.format(currentTime+259200000,'yyyy-MM-dd')}"></td>
+                            <td th:text="${#dates.format(currentTime+259200000,'EEE')}"></td>
+                            <td>下午</td>
+                            <td th:text="${tuesdayA.registerLimited}"></td>
+                            <div th:if="${tuesdayA.registerLimited>0 and session.user != null}">
+                                <td>
+                                    <form id="insert_modal" class="form-horizontal" name="insert_modal" action="/insertregister" method="post">
+                                        <input type="hidden" name="scid" th:value="${thuesdayA.scid}">
+                                        <input type="hidden" name="visitDate" th:value="${currentTime+259200000}">
+                                        <input type="hidden" name="cardnumber" th:value="${session.user.cardnumber}">
+                                        <button type="submit" class="btn btn-sm btn-danger"><a style="color: white">预约</a></button>
+                                    </form>
+                                </td>
+                            </div>
+                        </tr>
+                    </div>
+                    <div th:case="'星期三'">
+                        <tr>
+                            <td th:text="${#dates.format(currentTime+259200000,'yyyy-MM-dd')}"></td>
+                            <td th:text="${#dates.format(currentTime+259200000,'EEE')}"></td>
+                            <td>早上</td>
+                            <td th:text="${wednesdayM.registerLimited}"></td>
+                            <div th:if="${wednesdayM.registerLimited>0 and session.user != null}">
+                                <td>
+                                    <form id="insert_modal" class="form-horizontal" name="insert_modal" action="/insertregister" method="post">
+                                        <input type="hidden" name="scid" th:value="${wednesdayM.scid}">
+                                        <input type="hidden" name="visitDate" th:value="${currentTime+259200000}">
+                                        <input type="hidden" name="cardnumber" th:value="${session.user.cardnumber}">
+                                        <button type="submit" class="btn btn-sm btn-danger"><a style="color: white">预约</a></button>
+                                    </form>
+                                </td>
+                            </div>
+                        </tr>
+                        <tr>
+                            <td th:text="${#dates.format(currentTime+259200000,'yyyy-MM-dd')}"></td>
+                            <td th:text="${#dates.format(currentTime+259200000,'EEE')}"></td>
+                            <td>下午</td>
+                            <td th:text="${wednesdayA.registerLimited}"></td>
+                            <div th:if="${wednesdayA.registerLimited>0 and session.user != null}">
+                                <td>
+                                    <form id="insert_modal" class="form-horizontal" name="insert_modal" action="/insertregister" method="post">
+                                        <input type="hidden" name="scid" th:value="${wednesdayA.scid}">
+                                        <input type="hidden" name="visitDate" th:value="${currentTime+259200000}">
+                                        <input type="hidden" name="cardnumber" th:value="${session.user.cardnumber}">
+                                        <button type="submit" class="btn btn-sm btn-danger"><a style="color: white">预约</a></button>
+                                    </form>
+                                </td>
+                            </div>
+                        </tr>
+                    </div>
+                    <div th:case="'星期四'">
+                        <tr>
+                            <td th:text="${#dates.format(currentTime+259200000,'yyyy-MM-dd')}"></td>
+                            <td th:text="${#dates.format(currentTime+259200000,'EEE')}"></td>
+                            <td>早上</td>
+                            <td th:text="${thursdayM.registerLimited}"></td>
+                            <div th:if="${thursdayM.registerLimited>0 and session.user != null}">
+                                <td>
+                                    <form id="insert_modal" class="form-horizontal" name="insert_modal" action="/insertregister" method="post">
+                                        <input type="hidden" name="scid" th:value="${thursdayM.scid}">
+                                        <input type="hidden" name="visitDate" th:value="${currentTime+259200000}">
+                                        <input type="hidden" name="cardnumber" th:value="${session.user.cardnumber}">
+                                        <button type="submit" class="btn btn-sm btn-danger"><a style="color: white">预约</a></button>
+                                    </form>
+                                </td>
+                            </div>
+                        </tr>
+                        <tr>
+                            <td th:text="${#dates.format(currentTime+259200000,'yyyy-MM-dd')}"></td>
+                            <td th:text="${#dates.format(currentTime+259200000,'EEE')}"></td>
+                            <td>下午</td>
+                            <td th:text="${thursdayA.registerLimited}"></td>
+                            <div th:if="${thursdayA.registerLimited>0 and session.user != null}">
+                                <td>
+                                    <form id="insert_modal" class="form-horizontal" name="insert_modal" action="/insertregister" method="post">
+                                        <input type="hidden" name="scid" th:value="${thursdayA.scid}">
+                                        <input type="hidden" name="visitDate" th:value="${currentTime+259200000}">
+                                        <input type="hidden" name="cardnumber" th:value="${session.user.cardnumber}">
+                                        <button type="submit" class="btn btn-sm btn-danger"><a style="color: white">预约</a></button>
+                                    </form>
+                                </td>
+                            </div>
+                        </tr>
+                    </div>
+                    <div th:case="'星期五'">
+                        <tr>
+                            <td th:text="${#dates.format(currentTime+259200000,'yyyy-MM-dd')}"></td>
+                            <td th:text="${#dates.format(currentTime+259200000,'EEE')}"></td>
+                            <td>早上</td>
+                            <td th:text="${fridayM.registerLimited}"></td>
+                            <div th:if="${fridayM.registerLimited>0 and session.user != null}">
+                                <td>
+                                    <form id="insert_modal" class="form-horizontal" name="insert_modal" action="/insertregister" method="post">
+                                        <input type="hidden" name="scid" th:value="${fridayM.scid}">
+                                        <input type="hidden" name="visitDate" th:value="${currentTime+259200000}">
+                                        <input type="hidden" name="cardnumber" th:value="${session.user.cardnumber}">
+                                        <button type="submit" class="btn btn-sm btn-danger"><a style="color: white">预约</a></button>
+                                    </form>
+                                </td>
+                            </div>
+                        </tr>
+                        <tr>
+                            <td th:text="${#dates.format(currentTime+259200000,'yyyy-MM-dd')}"></td>
+                            <td th:text="${#dates.format(currentTime+259200000,'EEE')}"></td>
+                            <td>下午</td>
+                            <td th:text="${fridayA.registerLimited}"></td>
+                            <div th:if="${fridayA.registerLimited>0 and session.user != null}">
+                                <td>
+                                    <form id="insert_modal" class="form-horizontal" name="insert_modal" action="/insertregister" method="post">
+                                        <input type="hidden" name="scid" th:value="${fridayA.scid}">
+                                        <input type="hidden" name="visitDate" th:value="${currentTime+259200000}">
+                                        <input type="hidden" name="cardnumber" th:value="${session.user.cardnumber}">
+                                        <button type="submit" class="btn btn-sm btn-danger"><a style="color: white">预约</a></button>
+                                    </form>
+                                </td>
+                            </div>
+                        </tr>
+                    </div>
+                    <div th:case="'星期六'">
+                        <tr>
+                            <td th:text="${#dates.format(currentTime+259200000,'yyyy-MM-dd')}"></td>
+                            <td th:text="${#dates.format(currentTime+259200000,'EEE')}"></td>
+                            <td>早上</td>
+                            <td th:text="${saturdayM.registerLimited}"></td>
+                            <div th:if="${saturdayM.registerLimited>0 and session.user != null}">
+                                <td>
+                                    <form id="insert_modal" class="form-horizontal" name="insert_modal" action="/insertregister" method="post">
+                                        <input type="hidden" name="scid" th:value="${saturdayM.scid}">
+                                        <input type="hidden" name="visitDate" th:value="${currentTime+259200000}">
+                                        <input type="hidden" name="cardnumber" th:value="${session.user.cardnumber}">
+                                        <button type="submit" class="btn btn-sm btn-danger"><a style="color: white">预约</a></button>
+                                    </form>
+                                </td>
+                            </div>
+                        </tr>
+                        <tr>
+                            <td th:text="${#dates.format(currentTime+259200000,'yyyy-MM-dd')}"></td>
+                            <td th:text="${#dates.format(currentTime+259200000,'EEE')}"></td>
+                            <td>下午</td>
+                            <td th:text="${saturdayA.registerLimited}"></td>
+                            <div th:if="${saturdayA.registerLimited>0 and session.user != null}">
+                                <td>
+                                    <form id="insert_modal" class="form-horizontal" name="insert_modal" action="/insertregister" method="post">
+                                        <input type="hidden" name="scid" th:value="${saturdayA.scid}">
+                                        <input type="hidden" name="visitDate" th:value="${currentTime+259200000}">
+                                        <input type="hidden" name="cardnumber" th:value="${session.user.cardnumber}">
+                                        <button type="submit" class="btn btn-sm btn-danger"><a style="color: white">预约</a></button>
+                                    </form>
+                                </td>
+                            </div>
+                        </tr>
+                    </div>
+                    <div th:case="'星期日'">
+                        <tr>
+                            <td th:text="${#dates.format(currentTime+259200000,'yyyy-MM-dd')}"></td>
+                            <td th:text="${#dates.format(currentTime+259200000,'EEE')}"></td>
+                            <td>早上</td>
+                            <td th:text="${sundayM.registerLimited}"></td>
+                            <div th:if="${sundayM.registerLimited>0 and session.user != null}">
+                                <td>
+                                    <form id="insert_modal" class="form-horizontal" name="insert_modal" action="/insertregister" method="post">
+                                        <input type="hidden" name="scid" th:value="${sundayM.scid}">
+                                        <input type="hidden" name="visitDate" th:value="${currentTime+259200000}">
+                                        <input type="hidden" name="cardnumber" th:value="${session.user.cardnumber}">
+                                        <button type="submit" class="btn btn-sm btn-danger"><a style="color: white">预约</a></button>
+                                    </form>
+                                </td>
+                            </div>
+                        </tr>
+                        <tr>
+                            <td th:text="${#dates.format(currentTime+259200000,'yyyy-MM-dd')}"></td>
+                            <td th:text="${#dates.format(currentTime+259200000,'EEE')}"></td>
+                            <td>下午</td>
+                            <td th:text="${sundayA.registerLimited}"></td>
+                            <div th:if="${sundayA.registerLimited>0 and session.user != null}">
+                                <td>
+                                    <form id="insert_modal" class="form-horizontal" name="insert_modal" action="/insertregister" method="post">
+                                        <input type="hidden" name="scid" th:value="${sundayA.scid}">
+                                        <input type="hidden" name="visitDate" th:value="${currentTime+259200000}">
+                                        <input type="hidden" name="cardnumber" th:value="${session.user.cardnumber}">
+                                        <button type="submit" class="btn btn-sm btn-danger"><a style="color: white">预约</a></button>
+                                    </form>
+                                </td>
+                            </div>
+                        </tr>
+                    </div>
+                </div>
+                <div th:switch="${#dates.format(currentTime+345600000,'EEE')}">
+                    <div th:case="'星期一'">
+                        <tr>
+                            <td th:text="${#dates.format(currentTime+345600000,'yyyy-MM-dd')}"></td>
+                            <td th:text="${#dates.format(currentTime+345600000,'EEE')}"></td>
+                            <td>早上</td>
+                            <td th:text="${mondayM.registerLimited}"></td>
+                            <div th:if="${mondayM.registerLimited>0 and session.user != null}">
+                                <td>
+                                    <form id="insert_modal" class="form-horizontal" name="insert_modal" action="/insertregister" method="post">
+                                        <input type="hidden" name="scid" th:value="${mondayM.scid}">
+                                        <input type="hidden" name="visitDate" th:value="${currentTime+345600000}">
+                                        <input type="hidden" name="cardnumber" th:value="${session.user.cardnumber}">
+                                        <button type="submit" class="btn btn-sm btn-danger"><a style="color: white">预约</a></button>
+                                    </form>
+                                </td>
+                            </div>
+                        </tr>
+                        <tr>
+                            <td th:text="${#dates.format(currentTime+345600000,'yyyy-MM-dd')}"></td>
+                            <td th:text="${#dates.format(currentTime+345600000,'EEE')}"></td>
+                            <td>下午</td>
+                            <td th:text="${mondayA.registerLimited}"></td>
+                            <div th:if="${mondayA.registerLimited>0 and session.user != null}">
+                                <td>
+                                    <form id="insert_modal" class="form-horizontal" name="insert_modal" action="/insertregister" method="post">
+                                        <input type="hidden" name="scid" th:value="${mondayA.scid}">
+                                        <input type="hidden" name="visitDate" th:value="${currentTime+345600000}">
+                                        <input type="hidden" name="cardnumber" th:value="${session.user.cardnumber}">
+                                        <button type="submit" class="btn btn-sm btn-danger"><a style="color: white">预约</a></button>
+                                    </form>
+                                </td>
+                            </div>
+                        </tr>
+                    </div>
+                    <div th:case="'星期二'">
+                        <tr>
+                            <td th:text="${#dates.format(currentTime+345600000,'yyyy-MM-dd')}"></td>
+                            <td th:text="${#dates.format(currentTime+345600000,'EEE')}"></td>
+                            <td>早上</td>
+                            <td th:text="${tuesdayM.registerLimited}"></td>
+                            <div th:if="${tuesdayM.registerLimited>0 and session.user != null}">
+                                <td>
+                                    <form id="insert_modal" class="form-horizontal" name="insert_modal" action="/insertregister" method="post">
+                                        <input type="hidden" name="scid" th:value="${tuesdayM.scid}">
+                                        <input type="hidden" name="visitDate" th:value="${currentTime+345600000}">
+                                        <input type="hidden" name="cardnumber" th:value="${session.user.cardnumber}">
+                                        <button type="submit" class="btn btn-sm btn-danger"><a style="color: white">预约</a></button>
+                                    </form>
+                                </td>
+                            </div>
+                        </tr>
+                        <tr>
+                            <td th:text="${#dates.format(currentTime+345600000,'yyyy-MM-dd')}"></td>
+                            <td th:text="${#dates.format(currentTime+345600000,'EEE')}"></td>
+                            <td>下午</td>
+                            <td th:text="${tuesdayA.registerLimited}"></td>
+                            <div th:if="${tuesdayA.registerLimited>0 and session.user != null}">
+                                <td>
+                                    <form id="insert_modal" class="form-horizontal" name="insert_modal" action="/insertregister" method="post">
+                                        <input type="hidden" name="scid" th:value="${tuesdayA.scid}">
+                                        <input type="hidden" name="visitDate" th:value="${currentTime+345600000}">
+                                        <input type="hidden" name="cardnumber" th:value="${session.user.cardnumber}">
+                                        <button type="submit" class="btn btn-sm btn-danger"><a style="color: white">预约</a></button>
+                                    </form>
+                                </td>
+                            </div>
+                        </tr>
+                    </div>
+                    <div th:case="'星期三'">
+                        <tr>
+                            <td th:text="${#dates.format(currentTime+345600000,'yyyy-MM-dd')}"></td>
+                            <td th:text="${#dates.format(currentTime+345600000,'EEE')}"></td>
+                            <td>早上</td>
+                            <td th:text="${wednesdayM.registerLimited}"></td>
+                            <div th:if="${wednesdayM.registerLimited>0 and session.user != null}">
+                                <td>
+                                    <form id="insert_modal" class="form-horizontal" name="insert_modal" action="/insertregister" method="post">
+                                        <input type="hidden" name="scid" th:value="${wednesdayM.scid}">
+                                        <input type="hidden" name="visitDate" th:value="${currentTime+345600000}">
+                                        <input type="hidden" name="cardnumber" th:value="${session.user.cardnumber}">
+                                        <button type="submit" class="btn btn-sm btn-danger"><a style="color: white">预约</a></button>
+                                    </form>
+                                </td>
+                            </div>
+                        </tr>
+                        <tr>
+                            <td th:text="${#dates.format(currentTime+345600000,'yyyy-MM-dd')}"></td>
+                            <td th:text="${#dates.format(currentTime+345600000,'EEE')}"></td>
+                            <td>下午</td>
+                            <td th:text="${wednesdayA.registerLimited}"></td>
+                            <div th:if="${wednesdayA.registerLimited>0 and session.user != null}">
+                                <td>
+                                    <form id="insert_modal" class="form-horizontal" name="insert_modal" action="/insertregister" method="post">
+                                        <input type="hidden" name="scid" th:value="${wednesdayA.scid}">
+                                        <input type="hidden" name="visitDate" th:value="${currentTime+345600000}">
+                                        <input type="hidden" name="cardnumber" th:value="${session.user.cardnumber}">
+                                        <button type="submit" class="btn btn-sm btn-danger"><a style="color: white">预约</a></button>
+                                    </form>
+                                </td>
+                            </div>
+                        </tr>
+                    </div>
+                    <div th:case="'星期四'">
+                        <tr>
+                            <td th:text="${#dates.format(currentTime+345600000,'yyyy-MM-dd')}"></td>
+                            <td th:text="${#dates.format(currentTime+345600000,'EEE')}"></td>
+                            <td>早上</td>
+                            <td th:text="${thursdayM.registerLimited}"></td>
+                            <div th:if="${thursdayM.registerLimited>0 and session.user != null}">
+                                <td>
+                                    <form id="insert_modal" class="form-horizontal" name="insert_modal" action="/insertregister" method="post">
+                                        <input type="hidden" name="scid" th:value="${thursdayM.scid}">
+                                        <input type="hidden" name="visitDate" th:value="${currentTime+345600000}">
+                                        <input type="hidden" name="cardnumber" th:value="${session.user.cardnumber}">
+                                        <button type="submit" class="btn btn-sm btn-danger"><a style="color: white">预约</a></button>
+                                    </form>
+                                </td>
+                            </div>
+                        </tr>
+                        <tr>
+                            <td th:text="${#dates.format(currentTime+345600000,'yyyy-MM-dd')}"></td>
+                            <td th:text="${#dates.format(currentTime+345600000,'EEE')}"></td>
+                            <td>下午</td>
+                            <td th:text="${thursdayA.registerLimited}"></td>
+                            <div th:if="${thursdayA.registerLimited>0 and session.user != null}">
+                                <td>
+                                    <form id="insert_modal" class="form-horizontal" name="insert_modal" action="/insertregister" method="post">
+                                        <input type="hidden" name="scid" th:value="${thursdayA.scid}">
+                                        <input type="hidden" name="visitDate" th:value="${currentTime+345600000}">
+                                        <input type="hidden" name="cardnumber" th:value="${session.user.cardnumber}">
+                                        <button type="submit" class="btn btn-sm btn-danger"><a style="color: white">预约</a></button>
+                                    </form>
+                                </td>
+                            </div>
+                        </tr>
+                    </div>
+                    <div th:case="'星期五'">
+                        <tr>
+                            <td th:text="${#dates.format(currentTime+345600000,'yyyy-MM-dd')}"></td>
+                            <td th:text="${#dates.format(currentTime+345600000,'EEE')}"></td>
+                            <td>早上</td>
+                            <td th:text="${fridayM.registerLimited}"></td>
+                            <div th:if="${fridayM.registerLimited>0 and session.user != null}">
+                                <td>
+                                    <form id="insert_modal" class="form-horizontal" name="insert_modal" action="/insertregister" method="post">
+                                        <input type="hidden" name="scid" th:value="${fridayM.scid}">
+                                        <input type="hidden" name="visitDate" th:value="${currentTime+345600000}">
+                                        <input type="hidden" name="cardnumber" th:value="${session.user.cardnumber}">
+                                        <button type="submit" class="btn btn-sm btn-danger"><a style="color: white">预约</a></button>
+                                    </form>
+                                </td>
+                            </div>
+                        </tr>
+                        <tr>
+                            <td th:text="${#dates.format(currentTime+345600000,'yyyy-MM-dd')}"></td>
+                            <td th:text="${#dates.format(currentTime+345600000,'EEE')}"></td>
+                            <td>下午</td>
+                            <td th:text="${fridayA.registerLimited}"></td>
+                            <div th:if="${fridayA.registerLimited>0 and session.user != null}">
+                                <td>
+                                    <form id="insert_modal" class="form-horizontal" name="insert_modal" action="/insertregister" method="post">
+                                        <input type="hidden" name="scid" th:value="${fridayA.scid}">
+                                        <input type="hidden" name="visitDate" th:value="${currentTime+345600000}">
+                                        <input type="hidden" name="cardnumber" th:value="${session.user.cardnumber}">
+                                        <button type="submit" class="btn btn-sm btn-danger"><a style="color: white">预约</a></button>
+                                    </form>
+                                </td>
+                            </div>
+                        </tr>
+                    </div>
+                    <div th:case="'星期六'">
+                        <tr>
+                            <td th:text="${#dates.format(currentTime+345600000,'yyyy-MM-dd')}"></td>
+                            <td th:text="${#dates.format(currentTime+345600000,'EEE')}"></td>
+                            <td>早上</td>
+                            <td th:text="${saturdayM.registerLimited}"></td>
+                            <div th:if="${saturdayM.registerLimited>0 and session.user != null}">
+                                <td>
+                                    <form id="insert_modal" class="form-horizontal" name="insert_modal" action="/insertregister" method="post">
+                                        <input type="hidden" name="scid" th:value="${saturdayM.scid}">
+                                        <input type="hidden" name="visitDate" th:value="${currentTime+345600000}">
+                                        <input type="hidden" name="cardnumber" th:value="${session.user.cardnumber}">
+                                        <button type="submit" class="btn btn-sm btn-danger"><a style="color: white">预约</a></button>
+                                    </form>
+                                </td>
+                            </div>
+                        </tr>
+                        <tr>
+                            <td th:text="${#dates.format(currentTime+345600000,'yyyy-MM-dd')}"></td>
+                            <td th:text="${#dates.format(currentTime+345600000,'EEE')}"></td>
+                            <td>下午</td>
+                            <td th:text="${saturdayA.registerLimited}"></td>
+                            <div th:if="${saturdayA.registerLimited>0 and session.user != null}">
+                                <td>
+                                    <form id="insert_modal" class="form-horizontal" name="insert_modal" action="/insertregister" method="post">
+                                        <input type="hidden" name="scid" th:value="${saturdayA.scid}">
+                                        <input type="hidden" name="visitDate" th:value="${currentTime+345600000}">
+                                        <input type="hidden" name="cardnumber" th:value="${session.user.cardnumber}">
+                                        <button type="submit" class="btn btn-sm btn-danger"><a style="color: white">预约</a></button>
+                                    </form>
+                                </td>
+                            </div>
+                        </tr>
+                    </div>
+                    <div th:case="'星期日'">
+                        <tr>
+                            <td th:text="${#dates.format(currentTime+345600000,'yyyy-MM-dd')}"></td>
+                            <td th:text="${#dates.format(currentTime+345600000,'EEE')}"></td>
+                            <td>早上</td>
+                            <td th:text="${sundayM.registerLimited}"></td>
+                            <div th:if="${sundayM.registerLimited>0 and session.user != null}">
+                                <td>
+                                    <form id="insert_modal" class="form-horizontal" name="insert_modal" action="/insertregister" method="post">
+                                        <input type="hidden" name="scid" th:value="${sundayM.scid}">
+                                        <input type="hidden" name="visitDate" th:value="${currentTime+345600000}">
+                                        <input type="hidden" name="cardnumber" th:value="${session.user.cardnumber}">
+                                        <button type="submit" class="btn btn-sm btn-danger"><a style="color: white">预约</a></button>
+                                    </form>
+                                </td>
+                            </div>
+                        </tr>
+                        <tr>
+                            <td th:text="${#dates.format(currentTime+345600000,'yyyy-MM-dd')}"></td>
+                            <td th:text="${#dates.format(currentTime+345600000,'EEE')}"></td>
+                            <td>下午</td>
+                            <td th:text="${sundayA.registerLimited}"></td>
+                            <div th:if="${sundayA.registerLimited>0 and session.user != null}">
+                                <td>
+                                    <form id="insert_modal" class="form-horizontal" name="insert_modal" action="/insertregister" method="post">
+                                        <input type="hidden" name="scid" th:value="${sundayA.scid}">
+                                        <input type="hidden" name="visitDate" th:value="${currentTime+345600000}">
+                                        <input type="hidden" name="cardnumber" th:value="${session.user.cardnumber}">
+                                        <button type="submit" class="btn btn-sm btn-danger"><a style="color: white">预约</a></button>
+                                    </form>
+                                </td>
+                            </div>
+                        </tr>
+                    </div>
+                </div>
+                <div th:switch="${#dates.format(currentTime+432000000,'EEE')}">
+                    <div th:case="'星期一'">
+                        <tr>
+                            <td th:text="${#dates.format(currentTime+432000000,'yyyy-MM-dd')}"></td>
+                            <td th:text="${#dates.format(currentTime+432000000,'EEE')}"></td>
+                            <td>早上</td>
+                            <td th:text="${mondayM.registerLimited}"></td>
+                            <div th:if="${mondayM.registerLimited>0 and session.user != null}">
+                                <td>
+                                    <form id="insert_modal" class="form-horizontal" name="insert_modal" action="/insertregister" method="post">
+                                        <input type="hidden" name="scid" th:value="${mondayM.scid}">
+                                        <input type="hidden" name="visitDate" th:value="${currentTime+432000000}">
+                                        <input type="hidden" name="cardnumber" th:value="${session.user.cardnumber}">
+                                        <button type="submit" class="btn btn-sm btn-danger"><a style="color: white">预约</a></button>
+                                    </form>
+                                </td>
+                            </div>
+                        </tr>
+                        <tr>
+                            <td th:text="${#dates.format(currentTime+432000000,'yyyy-MM-dd')}"></td>
+                            <td th:text="${#dates.format(currentTime+432000000,'EEE')}"></td>
+                            <td>下午</td>
+                            <td th:text="${mondayA.registerLimited}"></td>
+                            <div th:if="${mondayA.registerLimited>0 and session.user != null}">
+                                <td>
+                                    <form id="insert_modal" class="form-horizontal" name="insert_modal" action="/insertregister" method="post">
+                                        <input type="hidden" name="scid" th:value="${mondayA.scid}">
+                                        <input type="hidden" name="visitDate" th:value="${currentTime+432000000}">
+                                        <input type="hidden" name="cardnumber" th:value="${session.user.cardnumber}">
+                                        <button type="submit" class="btn btn-sm btn-danger"><a style="color: white">预约</a></button>
+                                    </form>
+                                </td>
+                            </div>
+                        </tr>
+                    </div>
+                    <div th:case="'星期二'">
+                        <tr>
+                            <td th:text="${#dates.format(currentTime+432000000,'yyyy-MM-dd')}"></td>
+                            <td th:text="${#dates.format(currentTime+432000000,'EEE')}"></td>
+                            <td>早上</td>
+                            <td th:text="${tuesdayM.registerLimited}"></td>
+                            <div th:if="${tuesdayM.registerLimited>0 and session.user != null}">
+                                <td>
+                                    <form id="insert_modal" class="form-horizontal" name="insert_modal" action="/insertregister" method="post">
+                                        <input type="hidden" name="scid" th:value="${tuesdayM.scid}">
+                                        <input type="hidden" name="visitDate" th:value="${currentTime+432000000}">
+                                        <input type="hidden" name="cardnumber" th:value="${session.user.cardnumber}">
+                                        <button type="submit" class="btn btn-sm btn-danger"><a style="color: white">预约</a></button>
+                                    </form>
+                                </td>
+                            </div>
+                        </tr>
+                        <tr>
+                            <td th:text="${#dates.format(currentTime+432000000,'yyyy-MM-dd')}"></td>
+                            <td th:text="${#dates.format(currentTime+432000000,'EEE')}"></td>
+                            <td>下午</td>
+                            <td th:text="${tuesdayA.registerLimited}"></td>
+                            <div th:if="${tuesdayA.registerLimited>0 and session.user != null}">
+                                <td>
+                                    <form id="insert_modal" class="form-horizontal" name="insert_modal" action="/insertregister" method="post">
+                                        <input type="hidden" name="scid" th:value="${tuesdayA.scid}">
+                                        <input type="hidden" name="visitDate" th:value="${currentTime+432000000}">
+                                        <input type="hidden" name="cardnumber" th:value="${session.user.cardnumber}">
+                                        <button type="submit" class="btn btn-sm btn-danger"><a style="color: white">预约</a></button>
+                                    </form>
+                                </td>
+                            </div>
+                        </tr>
+                    </div>
+                    <div th:case="'星期三'">
+                        <tr>
+                            <td th:text="${#dates.format(currentTime+432000000,'yyyy-MM-dd')}"></td>
+                            <td th:text="${#dates.format(currentTime+432000000,'EEE')}"></td>
+                            <td>早上</td>
+                            <td th:text="${wednesdayM.registerLimited}"></td>
+                            <div th:if="${wednesdayM.registerLimited>0 and session.user != null}">
+                                <td>
+                                    <form id="insert_modal" class="form-horizontal" name="insert_modal" action="/insertregister" method="post">
+                                        <input type="hidden" name="scid" th:value="${wednesdayM.scid}">
+                                        <input type="hidden" name="visitDate" th:value="${currentTime+432000000}">
+                                        <input type="hidden" name="cardnumber" th:value="${session.user.cardnumber}">
+                                        <button type="submit" class="btn btn-sm btn-danger"><a style="color: white">预约</a></button>
+                                    </form>
+                                </td>
+                            </div>
+                        </tr>
+                        <tr>
+                            <td th:text="${#dates.format(currentTime+432000000,'yyyy-MM-dd')}"></td>
+                            <td th:text="${#dates.format(currentTime+432000000,'EEE')}"></td>
+                            <td>下午</td>
+                            <td th:text="${wednesdayA.registerLimited}"></td>
+                            <div th:if="${wednesdayA.registerLimited>0 and session.user != null}">
+                                <td>
+                                    <form id="insert_modal" class="form-horizontal" name="insert_modal" action="/insertregister" method="post">
+                                        <input type="hidden" name="scid" th:value="${wednesdayA.scid}">
+                                        <input type="hidden" name="visitDate" th:value="${currentTime+432000000}">
+                                        <input type="hidden" name="cardnumber" th:value="${session.user.cardnumber}">
+                                        <button type="submit" class="btn btn-sm btn-danger"><a style="color: white">预约</a></button>
+                                    </form>
+                                </td>
+                            </div>
+                        </tr>
+                    </div>
+                    <div th:case="'星期四'">
+                        <tr>
+                            <td th:text="${#dates.format(currentTime+432000000,'yyyy-MM-dd')}"></td>
+                            <td th:text="${#dates.format(currentTime+432000000,'EEE')}"></td>
+                            <td>早上</td>
+                            <td th:text="${thursdayM.registerLimited}"></td>
+                            <div th:if="${thursdayM.registerLimited>0 and session.user != null}">
+                                <td>
+                                    <form id="insert_modal" class="form-horizontal" name="insert_modal" action="/insertregister" method="post">
+                                        <input type="hidden" name="scid" th:value="${thursdayM.scid}">
+                                        <input type="hidden" name="visitDate" th:value="${currentTime+432000000}">
+                                        <input type="hidden" name="cardnumber" th:value="${session.user.cardnumber}">
+                                        <button type="submit" class="btn btn-sm btn-danger"><a style="color: white">预约</a></button>
+                                    </form>
+                                </td>
+                            </div>
+                        </tr>
+                        <tr>
+                            <td th:text="${#dates.format(currentTime+432000000,'yyyy-MM-dd')}"></td>
+                            <td th:text="${#dates.format(currentTime+432000000,'EEE')}"></td>
+                            <td>下午</td>
+                            <td th:text="${thursdayA.registerLimited}"></td>
+                            <div th:if="${thursdayA.registerLimited>0 and session.user != null}">
+                                <td>
+                                    <form id="insert_modal" class="form-horizontal" name="insert_modal" action="/insertregister" method="post">
+                                        <input type="hidden" name="scid" th:value="${thursdayA.scid}">
+                                        <input type="hidden" name="visitDate" th:value="${currentTime+432000000}">
+                                        <input type="hidden" name="cardnumber" th:value="${session.user.cardnumber}">
+                                        <button type="submit" class="btn btn-sm btn-danger"><a style="color: white">预约</a></button>
+                                    </form>
+                                </td>
+                            </div>
+                        </tr>
+                    </div>
+                    <div th:case="'星期五'">
+                        <tr>
+                            <td th:text="${#dates.format(currentTime+432000000,'yyyy-MM-dd')}"></td>
+                            <td th:text="${#dates.format(currentTime+432000000,'EEE')}"></td>
+                            <td>早上</td>
+                            <td th:text="${fridayM.registerLimited}"></td>
+                            <div th:if="${fridayM.registerLimited>0 and session.user != null}">
+                                <td>
+                                    <form id="insert_modal" class="form-horizontal" name="insert_modal" action="/insertregister" method="post">
+                                        <input type="hidden" name="scid" th:value="${fridayM.scid}">
+                                        <input type="hidden" name="visitDate" th:value="${currentTime+432000000}">
+                                        <input type="hidden" name="cardnumber" th:value="${session.user.cardnumber}">
+                                        <button type="submit" class="btn btn-sm btn-danger"><a style="color: white">预约</a></button>
+                                    </form>
+                                </td>
+                            </div>
+                        </tr>
+                        <tr>
+                            <td th:text="${#dates.format(currentTime+432000000,'yyyy-MM-dd')}"></td>
+                            <td th:text="${#dates.format(currentTime+432000000,'EEE')}"></td>
+                            <td>下午</td>
+                            <td th:text="${fridayA.registerLimited}"></td>
+                            <div th:if="${fridayA.registerLimited>0 and session.user != null}">
+                                <td>
+                                    <form id="insert_modal" class="form-horizontal" name="insert_modal" action="/insertregister" method="post">
+                                        <input type="hidden" name="scid" th:value="${fridayA.scid}">
+                                        <input type="hidden" name="visitDate" th:value="${currentTime+432000000}">
+                                        <input type="hidden" name="cardnumber" th:value="${session.user.cardnumber}">
+                                        <button type="submit" class="btn btn-sm btn-danger"><a style="color: white">预约</a></button>
+                                    </form>
+                                </td>
+                            </div>
+                        </tr>
+                    </div>
+                    <div th:case="'星期六'">
+                        <tr>
+                            <td th:text="${#dates.format(currentTime+432000000,'yyyy-MM-dd')}"></td>
+                            <td th:text="${#dates.format(currentTime+432000000,'EEE')}"></td>
+                            <td>早上</td>
+                            <td th:text="${saturdayM.registerLimited}"></td>
+                            <div th:if="${saturdayM.registerLimited>0 and session.user != null}">
+                                <td>
+                                    <form id="insert_modal" class="form-horizontal" name="insert_modal" action="/insertregister" method="post">
+                                        <input type="hidden" name="scid" th:value="${saturdayM.scid}">
+                                        <input type="hidden" name="visitDate" th:value="${currentTime+432000000}">
+                                        <input type="hidden" name="cardnumber" th:value="${session.user.cardnumber}">
+                                        <button type="submit" class="btn btn-sm btn-danger"><a style="color: white">预约</a></button>
+                                    </form>
+                                </td>
+                            </div>
+                        </tr>
+                        <tr>
+                            <td th:text="${#dates.format(currentTime+432000000,'yyyy-MM-dd')}"></td>
+                            <td th:text="${#dates.format(currentTime+432000000,'EEE')}"></td>
+                            <td>下午</td>
+                            <td th:text="${saturdayA.registerLimited}"></td>
+                            <div th:if="${saturdayA.registerLimited>0 and session.user != null}">
+                                <td>
+                                    <form id="insert_modal" class="form-horizontal" name="insert_modal" action="/insertregister" method="post">
+                                        <input type="hidden" name="scid" th:value="${saturdayA.scid}">
+                                        <input type="hidden" name="visitDate" th:value="${currentTime+432000000}">
+                                        <input type="hidden" name="cardnumber" th:value="${session.user.cardnumber}">
+                                        <button type="submit" class="btn btn-sm btn-danger"><a style="color: white">预约</a></button>
+                                    </form>
+                                </td>
+                            </div>
+                        </tr>
+                    </div>
+                    <div th:case="'星期日'">
+                        <tr>
+                            <td th:text="${#dates.format(currentTime+432000000,'yyyy-MM-dd')}"></td>
+                            <td th:text="${#dates.format(currentTime+432000000,'EEE')}"></td>
+                            <td>早上</td>
+                            <td th:text="${sundayM.registerLimited}"></td>
+                            <div th:if="${sundayM.registerLimited>0 and session.user != null}">
+                                <td>
+                                    <form id="insert_modal" class="form-horizontal" name="insert_modal" action="/insertregister" method="post">
+                                        <input type="hidden" name="scid" th:value="${sundayM.scid}">
+                                        <input type="hidden" name="visitDate" th:value="${currentTime+432000000}">
+                                        <input type="hidden" name="cardnumber" th:value="${session.user.cardnumber}">
+                                        <button type="submit" class="btn btn-sm btn-danger"><a style="color: white">预约</a></button>
+                                    </form>
+                                </td>
+                            </div>
+                        </tr>
+                        <tr>
+                            <td th:text="${#dates.format(currentTime+432000000,'yyyy-MM-dd')}"></td>
+                            <td th:text="${#dates.format(currentTime+432000000,'EEE')}"></td>
+                            <td>下午</td>
+                            <td th:text="${sundayA.registerLimited}"></td>
+                            <div th:if="${sundayA.registerLimited>0 and session.user != null}">
+                                <td>
+                                    <form id="insert_modal" class="form-horizontal" name="insert_modal" action="/insertregister" method="post">
+                                        <input type="hidden" name="scid" th:value="${sundayA.scid}">
+                                        <input type="hidden" name="visitDate" th:value="${currentTime+432000000}">
+                                        <input type="hidden" name="cardnumber" th:value="${session.user.cardnumber}">
+                                        <button type="submit" class="btn btn-sm btn-danger"><a style="color: white">预约</a></button>
+                                    </form>
+                                </td>
+                            </div>
+                        </tr>
+                    </div>
+                </div>
+                <div th:switch="${#dates.format(currentTime+518400000,'EEE')}">
+                    <div th:case="'星期一'">
+                        <tr>
+                            <td th:text="${#dates.format(currentTime+518400000,'yyyy-MM-dd')}"></td>
+                            <td th:text="${#dates.format(currentTime+518400000,'EEE')}"></td>
+                            <td>早上</td>
+                            <td th:text="${mondayM.registerLimited}"></td>
+                            <div th:if="${mondayM.registerLimited>0 and session.user != null}">
+                                <td>
+                                    <form id="insert_modal" class="form-horizontal" name="insert_modal" action="/insertregister" method="post">
+                                        <input type="hidden" name="scid" th:value="${mondayM.scid}">
+                                        <input type="hidden" name="visitDate" th:value="${currentTime+518400000}">
+                                        <input type="hidden" name="cardnumber" th:value="${session.user.cardnumber}">
+                                        <button type="submit" class="btn btn-sm btn-danger"><a style="color: white">预约</a></button>
+                                    </form>
+                                </td>
+                            </div>
+                        </tr>
+                        <tr>
+                            <td th:text="${#dates.format(currentTime+518400000,'yyyy-MM-dd')}"></td>
+                            <td th:text="${#dates.format(currentTime+518400000,'EEE')}"></td>
+                            <td>下午</td>
+                            <td th:text="${mondayA.registerLimited}"></td>
+                            <div th:if="${mondayA.registerLimited>0 and session.user != null}">
+                                <td>
+                                    <form id="insert_modal" class="form-horizontal" name="insert_modal" action="/insertregister" method="post">
+                                        <input type="hidden" name="scid" th:value="${mondayA.scid}">
+                                        <input type="hidden" name="visitDate" th:value="${currentTime+518400000}">
+                                        <input type="hidden" name="cardnumber" th:value="${session.user.cardnumber}">
+                                        <button type="submit" class="btn btn-sm btn-danger"><a style="color: white">预约</a></button>
+                                    </form>
+                                </td>
+                            </div>
+                        </tr>
+                    </div>
+                    <div th:case="'星期二'">
+                        <tr>
+                            <td th:text="${#dates.format(currentTime+518400000,'yyyy-MM-dd')}"></td>
+                            <td th:text="${#dates.format(currentTime+518400000,'EEE')}"></td>
+                            <td>早上</td>
+                            <td th:text="${tuesdayM.registerLimited}"></td>
+                            <div th:if="${tuesdayM.registerLimited>0 and session.user != null}">
+                                <td>
+                                    <form id="insert_modal" class="form-horizontal" name="insert_modal" action="/insertregister" method="post">
+                                        <input type="hidden" name="scid" th:value="${tuesdayM.scid}">
+                                        <input type="hidden" name="visitDate" th:value="${currentTime+518400000}">
+                                        <input type="hidden" name="cardnumber" th:value="${session.user.cardnumber}">
+                                        <button type="submit" class="btn btn-sm btn-danger"><a style="color: white">预约</a></button>
+                                    </form>
+                                </td>
+                            </div>
+                        </tr>
+                        <tr>
+                            <td th:text="${#dates.format(currentTime+518400000,'yyyy-MM-dd')}"></td>
+                            <td th:text="${#dates.format(currentTime+518400000,'EEE')}"></td>
+                            <td>下午</td>
+                            <td th:text="${tuesdayA.registerLimited}"></td>
+                            <div th:if="${tuesdayA.registerLimited>0 and session.user != null}">
+                                <td>
+                                    <form id="insert_modal" class="form-horizontal" name="insert_modal" action="/insertregister" method="post">
+                                        <input type="hidden" name="scid" th:value="${tuesdayA.scid}">
+                                        <input type="hidden" name="visitDate" th:value="${currentTime+518400000}">
+                                        <input type="hidden" name="cardnumber" th:value="${session.user.cardnumber}">
+                                        <button type="submit" class="btn btn-sm btn-danger"><a style="color: white">预约</a></button>
+                                    </form>
+                                </td>
+                            </div>
+                        </tr>
+                    </div>
+                    <div th:case="'星期三'">
+                        <tr>
+                            <td th:text="${#dates.format(currentTime+518400000,'yyyy-MM-dd')}"></td>
+                            <td th:text="${#dates.format(currentTime+518400000,'EEE')}"></td>
+                            <td>早上</td>
+                            <td th:text="${wednesdayM.registerLimited}"></td>
+                            <div th:if="${wednesdayM.registerLimited>0 and session.user != null}">
+                                <td>
+                                    <form id="insert_modal" class="form-horizontal" name="insert_modal" action="/insertregister" method="post">
+                                        <input type="hidden" name="scid" th:value="${wednesdayM.scid}">
+                                        <input type="hidden" name="visitDate" th:value="${currentTime+518400000}">
+                                        <input type="hidden" name="cardnumber" th:value="${session.user.cardnumber}">
+                                        <button type="submit" class="btn btn-sm btn-danger"><a style="color: white">预约</a></button>
+                                    </form>
+                                </td>
+                            </div>
+                        </tr>
+                        <tr>
+                            <td th:text="${#dates.format(currentTime+518400000,'yyyy-MM-dd')}"></td>
+                            <td th:text="${#dates.format(currentTime+518400000,'EEE')}"></td>
+                            <td>下午</td>
+                            <td th:text="${wednesdayA.registerLimited}"></td>
+                            <div th:if="${wednesdayA.registerLimited>0 and session.user != null}">
+                                <td>
+                                    <form id="insert_modal" class="form-horizontal" name="insert_modal" action="/insertregister" method="post">
+                                        <input type="hidden" name="scid" th:value="${wednesdayA.scid}">
+                                        <input type="hidden" name="visitDate" th:value="${currentTime+518400000}">
+                                        <input type="hidden" name="cardnumber" th:value="${session.user.cardnumber}">
+                                        <button type="submit" class="btn btn-sm btn-danger"><a style="color: white">预约</a></button>
+                                    </form>
+                                </td>
+                            </div>
+                        </tr>
+                    </div>
+                    <div th:case="'星期四'">
+                        <tr>
+                            <td th:text="${#dates.format(currentTime+518400000,'yyyy-MM-dd')}"></td>
+                            <td th:text="${#dates.format(currentTime+518400000,'EEE')}"></td>
+                            <td>早上</td>
+                            <td th:text="${thursdayM.registerLimited}"></td>
+                            <div th:if="${thursdayM.registerLimited>0 and session.user != null}">
+                                <td>
+                                    <form id="insert_modal" class="form-horizontal" name="insert_modal" action="/insertregister" method="post">
+                                        <input type="hidden" name="scid" th:value="${thursdayM.scid}">
+                                        <input type="hidden" name="visitDate" th:value="${currentTime+518400000}">
+                                        <input type="hidden" name="cardnumber" th:value="${session.user.cardnumber}">
+                                        <button type="submit" class="btn btn-sm btn-danger"><a style="color: white">预约</a></button>
+                                    </form>
+                                </td>
+                            </div>
+                        </tr>
+                        <tr>
+                            <td th:text="${#dates.format(currentTime+518400000,'yyyy-MM-dd')}"></td>
+                            <td th:text="${#dates.format(currentTime+518400000,'EEE')}"></td>
+                            <td>下午</td>
+                            <td th:text="${thursdayA.registerLimited}"></td>
+                            <div th:if="${thursdayA.registerLimited>0 and session.user != null}">
+                                <td>
+                                    <form id="insert_modal" class="form-horizontal" name="insert_modal" action="/insertregister" method="post">
+                                        <input type="hidden" name="scid" th:value="${thursdayA.scid}">
+                                        <input type="hidden" name="visitDate" th:value="${currentTime+518400000}">
+                                        <input type="hidden" name="cardnumber" th:value="${session.user.cardnumber}">
+                                        <button type="submit" class="btn btn-sm btn-danger"><a style="color: white">预约</a></button>
+                                    </form>
+                                </td>
+                            </div>
+                        </tr>
+                    </div>
+                    <div th:case="'星期五'">
+                        <tr>
+                            <td th:text="${#dates.format(currentTime+518400000,'yyyy-MM-dd')}"></td>
+                            <td th:text="${#dates.format(currentTime+518400000,'EEE')}"></td>
+                            <td>早上</td>
+                            <td th:text="${fridayM.registerLimited}"></td>
+                            <div th:if="${fridayM.registerLimited>0 and session.user != null}">
+                                <td>
+                                    <form id="insert_modal" class="form-horizontal" name="insert_modal" action="/insertregister" method="post">
+                                        <input type="hidden" name="scid" th:value="${fridayM.scid}">
+                                        <input type="hidden" name="visitDate" th:value="${currentTime+518400000}">
+                                        <input type="hidden" name="cardnumber" th:value="${session.user.cardnumber}">
+                                        <button type="submit" class="btn btn-sm btn-danger"><a style="color: white">预约</a></button>
+                                    </form>
+                                </td>
+                            </div>
+                        </tr>
+                        <tr>
+                            <td th:text="${#dates.format(currentTime+518400000,'yyyy-MM-dd')}"></td>
+                            <td th:text="${#dates.format(currentTime+518400000,'EEE')}"></td>
+                            <td>下午</td>
+                            <td th:text="${fridayA.registerLimited}"></td>
+                            <div th:if="${fridayA.registerLimited>0 and session.user != null}">
+                                <td>
+                                    <form id="insert_modal" class="form-horizontal" name="insert_modal" action="/insertregister" method="post">
+                                        <input type="hidden" name="scid" th:value="${fridayA.scid}">
+                                        <input type="hidden" name="visitDate" th:value="${currentTime+518400000}">
+                                        <input type="hidden" name="cardnumber" th:value="${session.user.cardnumber}">
+                                        <button type="submit" class="btn btn-sm btn-danger"><a style="color: white">预约</a></button>
+                                    </form>
+                                </td>
+                            </div>
+                        </tr>
+                    </div>
+                    <div th:case="'星期六'">
+                        <tr>
+                            <td th:text="${#dates.format(currentTime+518400000,'yyyy-MM-dd')}"></td>
+                            <td th:text="${#dates.format(currentTime+518400000,'EEE')}"></td>
+                            <td>早上</td>
+                            <td th:text="${saturdayM.registerLimited}"></td>
+                            <div th:if="${saturdayM.registerLimited>0 and session.user != null}">
+                                <td>
+                                    <form id="insert_modal" class="form-horizontal" name="insert_modal" action="/insertregister" method="post">
+                                        <input type="hidden" name="scid" th:value="${saturdayM.scid}">
+                                        <input type="hidden" name="visitDate" th:value="${currentTime+518400000}">
+                                        <input type="hidden" name="cardnumber" th:value="${session.user.cardnumber}">
+                                        <button type="submit" class="btn btn-sm btn-danger"><a style="color: white">预约</a></button>
+                                    </form>
+                                </td>
+                            </div>
+                        </tr>
+                        <tr>
+                            <td th:text="${#dates.format(currentTime+518400000,'yyyy-MM-dd')}"></td>
+                            <td th:text="${#dates.format(currentTime+518400000,'EEE')}"></td>
+                            <td>下午</td>
+                            <td th:text="${saturdayA.registerLimited}"></td>
+                            <div th:if="${saturdayA.registerLimited>0 and session.user != null}">
+                                <td>
+                                    <form id="insert_modal" class="form-horizontal" name="insert_modal" action="/insertregister" method="post">
+                                        <input type="hidden" name="scid" th:value="${saturdayA.scid}">
+                                        <input type="hidden" name="visitDate" th:value="${currentTime+518400000}">
+                                        <input type="hidden" name="cardnumber" th:value="${session.user.cardnumber}">
+                                        <button type="submit" class="btn btn-sm btn-danger"><a style="color: white">预约</a></button>
+                                    </form>
+                                </td>
+                            </div>
+                        </tr>
+                    </div>
+                    <div th:case="'星期日'">
+                        <tr>
+                            <td th:text="${#dates.format(currentTime+518400000,'yyyy-MM-dd')}"></td>
+                            <td th:text="${#dates.format(currentTime+518400000,'EEE')}"></td>
+                            <td>早上</td>
+                            <td th:text="${sundayM.registerLimited}"></td>
+                            <div th:if="${sundayM.registerLimited>0 and session.user != null}">
+                                <td>
+                                    <form id="insert_modal" class="form-horizontal" name="insert_modal" action="/insertregister" method="post">
+                                        <input type="hidden" name="scid" th:value="${sundayM.scid}">
+                                        <input type="hidden" name="visitDate" th:value="${currentTime+518400000}">
+                                        <input type="hidden" name="cardnumber" th:value="${session.user.cardnumber}">
+                                        <button type="submit" class="btn btn-sm btn-danger"><a style="color: white">预约</a></button>
+                                    </form>
+                                </td>
+                            </div>
+                        </tr>
+                        <tr>
+                            <td th:text="${#dates.format(currentTime+518400000,'yyyy-MM-dd')}"></td>
+                            <td th:text="${#dates.format(currentTime+518400000,'EEE')}"></td>
+                            <td>下午</td>
+                            <td th:text="${sundayA.registerLimited}"></td>
+                            <div th:if="${sundayA.registerLimited>0 and session.user != null}">
+                                <td>
+                                    <form id="insert_modal" class="form-horizontal" name="insert_modal" action="/insertregister" method="post">
+                                        <input type="hidden" name="scid" th:value="${sundayA.scid}">
+                                        <input type="hidden" name="visitDate" th:value="${currentTime+518400000}">
+                                        <input type="hidden" name="cardnumber" th:value="${session.user.cardnumber}">
+                                        <button type="submit" class="btn btn-sm btn-danger"><a style="color: white">预约</a></button>
+                                    </form>
+                                </td>
+                            </div>
+                        </tr>
+                    </div>
+                </div>
+                </tbody>
+            </table>
+        </div>
+<!--    复制代码-->
+<!--        <div class="content" id="content">-->
+    <!--    <div class="content-lists clearfix">-->
+    <!--        <div class="wrap clearfix">-->
+    <!--            <table>-->
+    <!--                <tr>-->
+    <!--                    <td>-->
+    <!--                        <div class="leftBtn">-->
+    <!--                            <div class="wrap_btn">-->
+    <!--                                <div class="btn"></div>-->
+    <!--                            </div>-->
+    <!--                            <div class="status">上午</div>-->
+    <!--                            <div class="status">下午</div>-->
+    <!--&lt;!&ndash;                            <div class="status">晚上</div>&ndash;&gt;-->
+    <!--                        </div>-->
+    <!--                    </td>-->
+    <!--                    <td>-->
+    <!--                        <div class="main">-->
+    <!--                            <div class="schedule_box clearfix">-->
+    <!--&lt;!&ndash;                                                <div class="schedule_box_item">&ndash;&gt;-->
+    <!--&lt;!&ndash;                                                  <div class="date">星期一 <br>2019-01-01</div>&ndash;&gt;-->
+    <!--&lt;!&ndash;                                                  <div class="status"></div>&ndash;&gt;-->
+    <!--&lt;!&ndash;                                                  <div class="status status_full">约满</div>&ndash;&gt;-->
+    <!--&lt;!&ndash;                                                  <div class="status"></div>&ndash;&gt;-->
+    <!--&lt;!&ndash;                                                </div>&ndash;&gt;-->
+
+    <!--                            </div>-->
+    <!--                        </div>-->
+    <!--                    </td>-->
+    <!--                    <td>-->
+    <!--                        <div class="rightBtn">-->
+    <!--                            <div class="wrap_btn">-->
+    <!--                                <div class="btn"></div>-->
+    <!--                            </div>-->
+    <!--                            <div class="status"></div>-->
+    <!--                            <div class="status"></div>-->
+    <!--                            <div class="status"></div>-->
+    <!--                        </div>-->
+    <!--                    </td>-->
+    <!--                    <td>-->
+    <!--                        <div class="content-news">-->
+    <!--                            <div class="title">-->
+    <!--                                预约规则-->
+    <!--                            </div>-->
+    <!--                            <div class="content-news-tips">-->
+    <!--                                <div class="line">-->
+    <!--                                    <div class="line-name">预约周期:</div><div>7天</div>-->
+    <!--                                </div>-->
+    <!--                                <div class="line">-->
+    <!--                                    <div class="line-name">放号时间:</div><div>8：30</div>-->
+    <!--                                </div>-->
+    <!--                                <div class="line">-->
+    <!--                                    <div class="line-name">停诊时间:</div>-->
+    <!--                                    <div>下午14：00停止次日预约挂号，周五14：00停挂至下周一</div>-->
+    <!--                                </div>-->
+    <!--                                <div class="line">-->
+    <!--                                    <div class="line-name">退号时间:</div>-->
+    <!--                                    <div>就诊前一工作日14：00前取消</div>-->
+    <!--                                </div>-->
+    <!--                                <div class="line">-->
+    <!--                                    <div class="line-name">特殊规则:</div>-->
+    <!--                                    <div>取号地点不同：西院区预约号区号地点：-->
+    <!--                                        西院区门诊楼一层大厅挂号窗口取号。东院区预约号取号地点：东-->
+    <!--                                        院区老门诊楼一层大厅挂号窗口或新门诊楼各楼层挂号/收费窗口取号。</div>-->
+    <!--                                </div>-->
+    <!--                            </div>-->
+    <!--                        </div>-->
+    <!--                    </td>-->
+    <!--                </tr>-->
+    <!--                <tr >-->
+    <!--                    <td colspan="4">-->
+    <!--                        <div class="bottom">-->
+    <!--                            <span class="choice">您还没有选择就诊日期</span>-->
+    <!--                        </div>-->
+    <!--                    </td>-->
+    <!--                </tr>-->
+    <!--            </table>-->
+    <!--        </div>-->
+    <!--        </div>-->
+    <!--    </div>-->
+
+    <!--&lt;!&ndash;复制代码&ndash;&gt;-->
+    </div>
+    <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12 intorduceblank" style="float:right">
+        <h3>预约引导</h3>
+        <span>
+                <p>·预约周期为六天</p><br>
+                <p>·当天的早上八点更新下周该天的号数</p><br>
+                <p>·若无预约按钮请先登录</p><br>
+            <span/>
+    </div>
+</div>
+</body>
+</html>

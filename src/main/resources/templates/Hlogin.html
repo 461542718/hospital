@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+
+    <title>挂号预约系统</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="css/hospital.css">
+    <link rel="stylesheet" href="css/bootstrapValidator.css">
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
+    <!--    <script-->
+    <!--            src="https://code.jquery.com/jquery-3.4.1.min.js"-->
+    <!--            integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="-->
+    <!--            crossorigin="anonymous"></script>-->
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/bootstrapValidator.js"></script>
+    <script src="js/zh_CN.js"></script>
+    <script src="js/kaptcha.js"></script>
+    <script type="text/javascript" src="js/validate.js"></script>
+    <script src="js/register.js"></script>
+
+</head>
+<script type="application/javascript">
+    window.onload = function () {
+        var closable=window.localStorage.getItem("closable");
+        if(closable){
+            window.close();
+            window.localStorage.removeItem("closable");
+        }
+    }
+</script>
+<body>
+
+<div th:insert="Hnavigation::nav"></div>
+
+<!-- begin:添加一个登录表单 -->
+<div>
+    <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
+        <h2><span class="glyphicon glyphicon-home" aria-hidden="true"></span>  医院管理登录</h2>
+        <hr>
+        <form id="insert_modal" class="form-horizontal" name="insert_modal" action="/Hlogin" method="post">
+            <div class="form-group">
+                <div class="col-md-3 col-md-offset-5">
+                    <label>账号</label>
+                    <input type="text" class="form-control" id="insert_name"
+                           name="name" placeholder="请输入医院号" autocomplete="off"/> <span
+                        class="help-block"></span>
+                </div>
+                <div class="col-md-3 col-md-offset-5">
+                    <label>密码</label>
+                    <input type="password" class="form-control" id="insert_password"
+                           name="password" placeholder="请输入密码" autocomplete="off"/> <span
+                        class="help-block"></span>
+                </div>
+                <!-- begin:验证码 -->
+                <div class="col-md-3 col-md-offset-5">
+                    <!--            <label>验证码</label>-->
+                    <!--            <input type="text" class="form-control" id="kaptcha" name="kaptcha"-->
+                    <!--                   placeholder="请输入验证码"  autocomplete="off" style="color: #000000;" /><span-->
+                    <!--                class="help-block"></span> <img-->
+                    <!--                src="kaptcha.jpg" width="200" id="kaptchaImage" title="看不清，点击换一张" />-->
+                    <!--            <div><small>看不清，点击换一张</small></div>-->
+                    <button type="submit" class="btn btn-primary"  id="user_insert_btn">登录</button>
+                </div>
+                <!-- end:验证码 -->
+            </div>
+
+        </form>
+    </div>
+</div>

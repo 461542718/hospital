@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+
+    <title>挂号预约系统</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="css/hospital.css">
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
+    <!--    <script-->
+    <!--            src="https://code.jquery.com/jquery-3.4.1.min.js"-->
+    <!--            integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="-->
+    <!--            crossorigin="anonymous"></script>-->
+    <script src="js/bootstrap.min.js"></script>
+
+</head>
+<script type="application/javascript">
+    window.onload = function () {
+        var closable=window.localStorage.getItem("closable");
+        if(closable){
+            window.close();
+            window.localStorage.removeItem("closable");
+        }
+    }
+</script>
+<body>
+
+<div th:insert="Dnavigation::nav"></div>
+
+<!-- begin:添加一个登录表单 -->
+<div>
+    <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
+
+
+        <!-- begin:主页 -->
+        <div>
+            <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
+                <ul class="nav nav-tabs">
+                    <!--                    <li role="presentation" ><a href="/Mindex">医院登记</a></li>-->
+                    <li role="presentation" class="active"><a href="/Dindex">预约挂号管理</a></li>
+                    <li role="presentation"><a href="/shiftapplymanage">调班申请</a></li>
+                    <!--                    <li role="presentation"><a href="/hospitaldepartmentmanage">医院科室登记</a></li>-->
+                    <!--                    <li role="presentation"><a href="/registermanage">挂号登记</a></li>-->
+                    <!--                    <li role="presentation"><a href="/noticemanage">发布公告</a></li>-->
+                </ul>
+            </div>
+        </div>
+        <!--begin：信息显示表格-->
+        <div class="card-body" >
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th>预约号</th>
+                    <th>患者号</th>
+                    <th>患者姓名</th>
+                    <th>科室名</th>
+                    <th>就诊时间</th>
+                    <!--                    <th>电话</th>-->
+                    <!--                    <th>医院级别</th>-->
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="item:${pageInfo.list}">
+                    <div th:if="${item.Rstatus==0}and${item.visitDate>item.currentDate}">
+                    <td th:text="${item.Rid}"></td>
+                    <td th:text="${item.cardnumber}"></td>
+                    <td th:text="${item.truename}"></td>
+                    <td th:text="${item.Dpmtname}"></td>
+                    <td th:text="${#dates.format(item.visitDate,'yyyy-MM-dd')}+${item.time==0?'上午':'下午'}"></td>
+                    <!--                    <td th:text="${item.hospitalAddr}"></td>-->
+                    <!--                    <td th:text="${item.hospitalTel}"></td>-->
+                    <!--                    <td th:text="${item.hospitalLevel}"></td>-->
+                    <td>
+                        <div class="btn-group">
+                            <a th:href="'/deleteDregister/'+${item.Rid}" style="color: white"><button class="btn btn-sm btn-danger">删除</button></a>
+                        </div>
+                    </td>
+                    </div>
+                </tr>
+                </tbody>
+            </table>
+            <ul class="pagination">
+                <li th:if="${pageInfo.hasPreviousPage}" class="page-item"><a class="page-link" th:href="@{/Dindex?pageNum=1}">&lt;&lt;</a></li>
+                <li th:if="${not pageInfo.hasPreviousPage}" class="page-item disabled"><a class="page-link" th:href="@{/Dindex?pageNum=1}">&lt;&lt;</a></li>
+
+                <li th:if="${pageInfo.hasPreviousPage}" class="page-item"><a class="page-link" th:href="@{/Dindex?pageNum=}+${pageInfo.prePage}">&lt;</a></li>
+                <li th:if="${not pageInfo.hasPreviousPage}" class="page-item disabled"><a class="page-link" th:href="@{/Dindex?pageNum=}+${pageInfo.prePage}">&lt;</a></li>
+
+
+                <li th:each="page:${pageInfo.navigatepageNums}" th:class="${pageInfo.pageNum==page}? 'active':''"><a class="page-link" th:href="@{/Dindex?pageNum=}+${page}" th:text="${page}"></a></li>
+
+
+                <li th:if="${pageInfo.hasNextPage}" class="page-item"><a class="page-link" th:href="@{/Dindex?pageNum=}+${pageInfo.nextPage}">&gt;</a></li>
+                <li th:if="${not pageInfo.hasNextPage}" class="page-item disabled"><a class="page-link" th:href="@{/Dindex?pageNum=}+${pageInfo.nextPage}">&gt;</a></li>
+
+                <li th:if="${pageInfo.hasNextPage}" class="page-item"><a class="page-link" th:href="@{/Dindex?pageNum=}+${pageInfo.pages}">&gt;&gt;</a></li>
+                <li th:if="${not pageInfo.hasNextPage}" class="page-item disabled"><a class="page-link" th:href="@{/Dindex?pageNum=}+${pageInfo.pages}">&gt;&gt;</a></li>
+            </ul>
+        </div>
+        <!--end：信息显示表格-->
+    </div>
+    <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
+        <a th:if="${session.hospital!=null}" th:href="'/insertHdepartment/'+${session.hospital.getHospitalId()}"><button type="button" class="btn btn-default btn-lg"><span class="glyphicon glyphicon-plus"></span>添加</button></a>
+        <button type="button" class="btn btn-default btn-lg"><span class="glyphicon glyphicon-refresh"></span>刷新</button>
+    </div>
+</div>
+
+</body>
+</html>
+

@@ -1,0 +1,266 @@
+.content .schedule{
+    width: 100%;
+    height: 36px;
+    margin-bottom: 12px;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+/* .content .schedule .back{
+	margin-left: 10px;
+	font-size: 14px;
+	font-weight: normal;
+	color:#60bff2;
+} */
+.content .schedule .back a{
+    margin-left: 10px;
+    font-size: 14px;
+    font-weight: normal;
+    color:#60bff2;
+}
+
+/* 预约挂号 */
+.content-lists .content-news .caption,
+.content-lists .content-tab .caption{
+    background-color: #eceef2;
+    height: 36px;
+    line-height: 36px;
+    padding-left: 20px;
+}
+
+.content-lists .content-news .caption{
+    color:#acacac;
+    padding-left: 8px;
+}
+
+.content-lists .content-news .caption span{
+    color:#60bff2;
+    font-size: 12px;
+}
+/* .content .content-tab .content-table table, th, td */
+
+.content-lists .content-list{
+    display: none;
+}
+.content-lists .focus{
+    display: block;
+}
+
+.content-table table,
+.content-table tr,
+.content-table td{
+    border: 0px;
+    border-collapse:collapse;
+}
+.content-table td{
+    width:120px;
+    height: 30px;
+    line-height: 30px;
+}
+.content-table td a{
+    font-weight: bold;
+    padding-left: 20px;
+    color: black;
+}
+.content-tab .content-table .classify{
+    width:200px;
+    background-color: #CEFFCE;
+    vertical-align:top;
+    text-align: center;
+}
+.content-tab .content-table .classify-item{
+    width:120px;
+}
+
+
+.content-lists .content-news .content-news-tips{
+    height: 236px;
+    overflow: auto;
+}
+
+.content-lists .content-news .line{
+    color:#acacac;
+    line-height: 20px;
+    font-size: 12px;
+    width: 100%;
+}
+
+.content-lists .content-news .line div{
+    display: inline-block;
+    float: left;
+    padding-top: 5px;
+    width: 130px;
+}
+.content-lists .content-news .line .line-name{
+    color:black;
+    width: 60px;
+    padding-left: 8px;
+}
+
+/* 医院介绍 */
+
+
+/* 预约须知 */
+
+
+
+
+/* 停诊信息 */
+.content-list .stop-title{
+    text-align: center;
+    height: 38px;
+    line-height: 38px;
+    font-weight: bold;
+    font-size: 16px;
+}
+.content-list .stop-tips-table th,
+.content-list .stop-tips-table td,
+.content-list .stop-tips-table{
+    font-size: 12px;
+    font-weight: normal;
+    color:#acacac;
+    border: 1px solid #acacac;
+    padding: 5px 10px;
+    text-align: center;
+    border-collapse:collapse;
+}
+.content-list .stop-tips-table{
+    margin: 0 auto;
+}
+.content-list .stop-tips-table th{
+    min-width: 50px;
+}
+.content-list .stop-tips-table th:nth-of-type(4){
+    width: 200px;
+}
+.content-list .stop-tips-table th:nth-of-type(6){
+    width: 120px;
+}
+
+/* 查询取消 */
+.search-cancel{
+    padding: 100px;
+    border:1px solid #acacac;
+}
+.search-cancel .line{
+    margin: 0 auto;
+    width: 400px;
+    height: 40px;
+    line-height: 40px;
+    /* background-color: yellow; */
+    text-align: center;
+}
+.search-cancel .line input{
+    width: 200px;
+    border:1px solid #acacac;
+    height: 18px;
+    /* display: inline-block; */
+    vertical-align: middle;
+    margin-left: 10px;
+}
+.search-cancel .line button{
+    width: 80px;
+    height: 20px;
+    background-color: #60bff2;
+    border-width: 0px;
+    color:white;
+    font-size: 12px;
+    /* margin-top: 5px; */
+    vertical-align: middle;
+    margin-left: 10px;
+}
+.search-cancel .line button:hover{
+    cursor: pointer;
+}
+/* 科室排班表 */
+
+.content-lists .wrap:nth-of-type(2) table{
+    width: 1000px;
+    height: 320px;
+    border-collapse:collapse;
+    border: 1px solid #ccc;
+}
+.content-lists .wrap:nth-of-type(2) table td{
+    border: 1px solid #ccc;
+}
+
+
+.content-lists .wrap .rightBtn,
+.content-lists .wrap .leftBtn{
+    width: 25px;
+    /* float: left; */
+    height: 270px;
+    /* border-right: 1px solid #ccc; */
+}
+
+
+.content-lists .wrap .wrap_btn{
+    height: 30px;
+}
+.content-lists .wrap .rightBtn .status,
+.content-lists .wrap .leftBtn .status{
+    height: 80px;
+    line-height: 40px;
+    text-align: right;
+    padding-right: 2px;
+    background-color: #CEFFCE;
+    font-size: 12px;
+
+}
+
+.content-lists .wrap .leftBtn .btn{
+    width: 0;
+    height: 0;
+    border-width: 10px;
+    border-style: solid;
+    border-color:  transparent #60bff2 transparent transparent;
+    margin-right: 7px;
+}
+.content-lists .wrap .rightBtn .btn{
+    width: 0;
+    height: 0;
+    border-width: 10px;
+    border-style: solid;
+    border-color:  transparent transparent transparent #60bff2;
+    margin-left: 7px;
+
+}
+.content-lists .wrap .main{
+    /* width : 90px * 7 */
+    width: 700px;
+    float: left;
+    height: 270px;
+    overflow: hidden;
+    position: relative;
+    margin: 0 auto;
+}
+
+.content-lists .wrap:nth-of-type(2) .content-news{
+    /* 1000 - 25 *2 - 700 = 250px; */
+    /* width: 248px; */
+    height: 270px;
+    /* position: absolute;
+    top:0px;
+    right: 0px; */
+    overflow: auto;
+    /* float: right; */
+    border: 0px;
+}
+.content-lists .wrap .content-news .title{
+    font-size: 16px;
+    text-align: center;
+    font-weight: bold;
+    height: 30px;
+    line-height: 30px;
+}
+.content-lists .wrap .bottom{
+    width: 1000px;
+    height: 50px;
+    /* border-top: 1px solid #acacac; */
+    line-height: 50px;
+    text-align: center;
+}
+.content-lists .wrap .bottom .choice{
+    background: url(../img/icon-info.jpg) 0 0 no-repeat;
+    padding-left: 30px;
+}

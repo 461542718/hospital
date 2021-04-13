@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+
+    <title>挂号预约系统</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="css/hospital.css">
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
+    <!--    <script-->
+    <!--            src="https://code.jquery.com/jquery-3.4.1.min.js"-->
+    <!--            integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="-->
+    <!--            crossorigin="anonymous"></script>-->
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/hospital.js"></script>
+</head>
+<script type="application/javascript">
+    window.onload = function () {
+        var closable=window.localStorage.getItem("closable");
+        if(closable){
+            window.close();
+            window.localStorage.removeItem("closable");
+        }
+    }
+</script>
+<body>
+
+<div th:insert="navigation::nav"></div>
+
+<div class="container-fluid main">
+    <div class="row">
+        <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
+            <h2><span class="glyphicon glyphicon-home" aria-hidden="true"></span>  医院信息</h2>
+            <hr>
+
+            <div class="media"  th:each="item:${pageInfo.list}">
+                <div class="media-left">
+                    <a href="#">
+                        <img th:if="${item.hospitalPhoto==null}" alt="160x160" width="150px" class="media-object img-thumbnail" src="images/userphoto/default.jpeg">
+                        <img th:if="${item.hospitalPhoto!=null}" alt="160x160" width="150px" class="media-object img-thumbnail" th:src="${item.hospitalPhoto}">
+                    </a>
+                </div>
+                <div class="media-body">
+                    <h4 class="media-heading">
+                        <a th:href="@{'/department/'+${item.hospitalId}}" th:text="${item.hospitalName}" style="color:#3e8f3e"></a>
+                    </h4>
+                    <span th:text="'医院电话：'+${item.hospitalTel}"></span>
+                    <br/>
+                    <span th:text="'医院地址：'+${item.hospitalAddr}"></span>
+                    <span th:text="'医院级别：'+${item.hospitalLevel}"></span>
+                    <br/>
+                    <button class="btn-mini btn-success" id="btn" onclick="toggle(this)" th:data-id="${item.hospitalId}">详情</button>
+                    <div th:id="${'spread-'+item.hospitalId}"  style="display:none">
+                        <span th:text="'医院擅长科室：'+${item.hospitalMajor}"></span>
+                        <br/>
+                        <span th:text="'医院简介：'+${item.hospitalInfo}"></span>
+                    </div>
+                </div>
+            </div>
+
+            <!--            <div class="media" th:each="question:${pagination.data}">-->
+            <!--                <div class="media-left">-->
+            <!--                    <a href="#">-->
+            <!--                        <img class="media-object img-thumbnail"  th:src="${question.user.avatarUrl}">-->
+            <!--                    </a>-->
+            <!--                </div>-->
+            <!--                <div class="media-body">-->
+            <!--                    <h4 class="media-heading" >-->
+            <!--                        <a th:href="@{'/question/'+${question.id}}"th:text="${question.title}"></a>-->
+            <!--                    </h4>-->
+            <!--                    <span th:text="${question.description}"></span><br>-->
+            <!--                    <span class="text-desc"><span th:text="${question.commentCount}"></span>个回复 · <span th:text="${question.viewCount}"></span>次浏览 · <span th:text="${#dates.format(question.gmtCreate,'yyyy-MM-dd HH:mm')}"></span></span>-->
+            <!--                </div>-->
+            <!--            </div>-->
+            <ul class="pagination">
+                <li th:if="${pageInfo.hasPreviousPage}" class="page-item"><a class="page-link" th:href="@{searchHospital?pageNum=1}">&lt;&lt;</a></li>
+                <li th:if="${not pageInfo.hasPreviousPage}" class="page-item disabled"><a class="page-link" th:href="@{searchHospital?pageNum=1}">&lt;&lt;</a></li>
+
+                <li th:if="${pageInfo.hasPreviousPage}" class="page-item"><a class="page-link" th:href="@{searchHospital?pageNum=}+${pageInfo.prePage}">&lt;</a></li>
+                <li th:if="${not pageInfo.hasPreviousPage}" class="page-item disabled"><a class="page-link" th:href="@{searchHospital?pageNum=}+${pageInfo.prePage}">&lt;</a></li>
+
+
+                <li th:each="page:${pageInfo.navigatepageNums}" th:class="${pageInfo.pageNum==page}? 'active':''"><a class="page-link" th:href="@{searchHospital?pageNum=}+${page}" th:text="${page}"></a></li>
+
+
+                <li th:if="${pageInfo.hasNextPage}" class="page-item"><a class="page-link" th:href="@{searchHospital?pageNum=}+${pageInfo.nextPage}">&gt;</a></li>
+                <li th:if="${not pageInfo.hasNextPage}" class="page-item disabled"><a class="page-link" th:href="@{searchHospital?pageNum=}+${pageInfo.nextPage}">&gt;</a></li>
+
+                <li th:if="${pageInfo.hasNextPage}" class="page-item"><a class="page-link" th:href="@{searchHospital?pageNum=}+${pageInfo.pages}">&gt;&gt;</a></li>
+                <li th:if="${not pageInfo.hasNextPage}" class="page-item disabled"><a class="page-link" th:href="@{searchHospital?pageNum=}+${pageInfo.pages}">&gt;&gt;</a></li>
+            </ul>
+        </div>
+        <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12 intorduceblank" style="float:right">
+            <h3>首页引导</h3>
+            <span>
+                <p>·点击医院名称即可进入医院挂号科室选择</p><br>
+                <p>·点击详情可查看医院的更多详细信息</p><br>
+                <p>·右上方公告栏为管理员发布的最新公告</p><br>
+            <span/>
+        </div>
+    </div>
+</div>
+</body>
+</html>

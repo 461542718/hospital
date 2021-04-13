@@ -1,0 +1,1 @@
+alter table userinfo modify Sex int not null;
