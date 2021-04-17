@@ -313,7 +313,7 @@
                             <td th:text="${#dates.format(currentTime+172800000,'EEE')}"></td>
                             <td>下午</td>
                             <td th:text="${mondayA.registerLimited}"></td>
-                            <div th:if="${mondayA.registerLimited and session.user != null}">
+                            <div th:if="${mondayA.registerLimited>0 and session.user != null}">
                                 <td>
                                     <form id="insert_modal" class="form-horizontal" name="insert_modal" action="/insertregister" method="post">
                                         <input type="hidden" name="scid" th:value="${mondayA.scid}">
@@ -590,7 +590,7 @@
                             <div th:if="${tuesdayA.registerLimited>0 and session.user != null}">
                                 <td>
                                     <form id="insert_modal" class="form-horizontal" name="insert_modal" action="/insertregister" method="post">
-                                        <input type="hidden" name="scid" th:value="${thuesdayA.scid}">
+                                        <input type="hidden" name="scid" th:value="${tuesdayA.scid}">
                                         <input type="hidden" name="visitDate" th:value="${currentTime+259200000}">
                                         <input type="hidden" name="cardnumber" th:value="${session.user.cardnumber}">
                                         <button type="submit" class="btn btn-sm btn-danger"><a style="color: white">预约</a></button>
